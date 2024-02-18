@@ -4,6 +4,8 @@ from PIL import Image, ImageTk
 def connexion():
 
     
+
+    
     email = entry_email.get()
     password = entry_password.get()
     print(f"Email : {email}, Mot de passe : {password}")
