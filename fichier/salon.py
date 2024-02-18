@@ -63,4 +63,6 @@ lien_mot_de_passe_oublie.pack(pady=5)
 lien_mot_de_passe_oublie.bind("<Button-1>", lambda event: mot_de_passe_oublie())
 
 # Boucle principale de l'application
+
 fenetre.mainloop()
+
