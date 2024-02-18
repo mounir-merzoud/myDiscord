@@ -1,11 +1,40 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+<<<<<<< HEAD
+=======
+import mysql.connector
+>>>>>>> main
 
 def connexion():
     email = entry_email.get()
     password = entry_password.get()
     print(f"Email : {email}, Mot de passe : {password}")
 
+<<<<<<< HEAD
+=======
+    # Connexion à la base de données MySQL
+    try:
+        connection = mysql.connector.connect(
+            host="localhost",  # Remplacez localhost par l'adresse de votre serveur MySQL
+            user="user",  # Remplacez votre_utilisateur par le nom d'utilisateur de votre base de données MySQL
+            password="Mounir-1992",  # Remplacez votre_mot_de_passe par le mot de passe de votre base de données MySQL
+            database="mounir-merzoud_mydiscord"  # Remplacez mounir_merzoud_mydiscord par le nom de votre base de données MySQL
+        )
+        print("Connexion réussie à la base de données")
+        # Écrivez ici votre code pour vérifier l'authentification de l'utilisateur avec l'email et le mot de passe
+        # Utilisez la variable 'connection' pour exécuter des requêtes SQL sur votre base de données
+        # Par exemple :
+        # cursor = connection.cursor()
+        # cursor.execute("SELECT * FROM user WHERE email = %s AND password = %s", (email, password))
+        # user = cursor.fetchone()
+        # if user:
+        #     print("Connexion réussie")
+        # else:
+        #     print("Échec de la connexion")
+    except mysql.connector.Error as error:
+        print("Erreur lors de la connexion à la base de données :", error)
+
+>>>>>>> main
 def inscription():
     print("Bouton Inscription appuyé")
 
@@ -63,4 +92,8 @@ lien_mot_de_passe_oublie.pack(pady=5)
 lien_mot_de_passe_oublie.bind("<Button-1>", lambda event: mot_de_passe_oublie())
 
 # Boucle principale de l'application
+<<<<<<< HEAD
 fenetre.mainloop()
+=======
+fenetre.mainloop()
+>>>>>>> main
