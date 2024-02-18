@@ -29,9 +29,6 @@ custom_font = pygame.font.Font('images/CFAzteques-Regular.ttf', 46)
 
 font = pygame.font.Font(None, 32)
 
-
-
-
 def draw_text(text, font, color, surface, x, y):
     text_obj = font.render(text, True, color)
     text_rect = text_obj.get_rect()
