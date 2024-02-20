@@ -1,6 +1,6 @@
 -- MySQL dump 10.14  Distrib 5.5.68-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: mounir-merzoud_mydiscord
+-- Host: localhost    Database: kamelia-mohamdi_mydiscord
 -- ------------------------------------------------------
 -- Server version	5.5.68-MariaDB
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-18 22:09:11
+-- Dump completed on 2024-02-19 16:37:59

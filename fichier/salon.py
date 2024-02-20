@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import mariadb
 import mysql.connector
 
 
@@ -12,12 +13,11 @@ def connexion():
     # Connexion à la base de données MySQL
     try:
         connection = mysql.connector.connect(
-            host="plesk.students-laplateforme.io",  # Adresse de votre serveur MySQL
-            port="3306",  # Port par défaut de MySQL
-            user="mounir",  # Nom d'utilisateur de la base de données MySQL
-            password="mounir-1992",  # Mot de passe de la base de données MySQL
-            database="kamelia-mohamdi_mydiscord"  # Nom de la base de données MySQL
-    )
+            host="localhost",  # Remplacez localhost par l'adresse de votre serveur MySQL
+            user="user",  # Remplacez votre_utilisateur par le nom d'utilisateur de votre base de données MySQL
+            password="Mounir-1992",  # Remplacez votre_mot_de_passe par le mot de passe de votre base de données MySQL
+            database="mounir-merzoud_mydiscord"  # Remplacez mounir_merzoud_mydiscord par le nom de votre base de données MySQL
+        )
         print("Connexion réussie à la base de données")
         # Écrivez ici votre code pour vérifier l'authentification de l'utilisateur avec l'email et le mot de passe
         # Utilisez la variable 'connection' pour exécuter des requêtes SQL sur votre base de données
@@ -29,7 +29,7 @@ def connexion():
         #     print("Connexion réussie")
         # else:
         #     print("Échec de la connexion")
-    except mysql.connector.Error as error:
+    except mariadb.Error as error:
         print("Erreur lors de la connexion à la base de données :", error)
 
 def inscription():
@@ -89,5 +89,5 @@ lien_mot_de_passe_oublie.pack(pady=5)
 lien_mot_de_passe_oublie.bind("<Button-1>", lambda event: mot_de_passe_oublie())
 
 # Boucle principale de l'application
-
 fenetre.mainloop()
+

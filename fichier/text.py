@@ -5,10 +5,10 @@ from threading import Thread
 import mysql.connector
 
 utilisateur = {}
-addresses = {} HOST = ''
+addresses = {} #HOST = ''
 PORT = 33000
 BUFSIZ = 1024
-ADDR = (HOST, PORT)
+ADDR = (#HOST, PORT)
 SERVER = socket(AF_INET, SOCK_STREAM)
 SERVER.bind(ADDR)
 
@@ -16,7 +16,7 @@ db = mysql.connector.connect(
     host='localhost',
     user=' username',
     password='motdepasse123',
-    database='mounir-merzoud_mydiscord'
+    database='mydiscord'
 )
 
 cursor = db.cursor()
