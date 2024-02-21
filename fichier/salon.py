@@ -11,7 +11,7 @@ def connexion():
     try:
         connection = mariadb.connect(
             host="plesk.students-laplateforme.io",
-            port=3306,  # Le port par défaut de MariaDB est 3306
+            port=3306,  
             user="mounir",
             password="mounir-1992",
             database="kamelia-mohamdi_mydiscord"
