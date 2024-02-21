@@ -1,14 +1,16 @@
-#!/usr/bin/env python3
-"""Server for multithreaded ( asynchronous) chat application."""
+"""
+
+# !/usr/bin/env python3
+#Server for multithreaded ( asynchronous) chat application.
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import mysql.connector
 
 utilisateur = {}
-addresses = {} #HOST = ''
+addresses = {} HOST = ''
 PORT = 33000
 BUFSIZ = 1024
-ADDR = (#HOST, PORT)
+ADDR = (HOST, PORT)
 SERVER = socket(AF_INET, SOCK_STREAM)
 SERVER.bind(ADDR)
 
@@ -22,7 +24,7 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 def accept_incoming_connections():
-    """Sets up handling for incoming utilisateeur"""
+    #Sets up handling for incoming utilisateeur
     while True:
         utilisateur, utilisateur_address = SERVER.accept()
         print("%s:%s connicxion." % utilisateur_address)
@@ -30,6 +32,34 @@ def accept_incoming_connections():
         addresses[utilisateur] = utilisateur_address
         Thread(target=handle_utilisateur, args=(utilisateur,)).start()
 
-def handle_utilisateur(utilisateur):
-    """handles a single client connection."""     
-    pass  
+    def handle_utilisateur(utilisateur):
+        #handles a single client connection.    
+        pass  
+""" 
+
+import mariadb
+from tkinter import *
+from PIL import Image, ImageTk
+
+class User(Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.geometry('1024x670+50+50')
+        self.resizable(0, 0)
+        self.title('Login Page')
+
+        # Charger l'image de fond et ajuster sa taille
+        bg_image = Image.open('images/Design sans titre.png')
+        width, height = self.winfo_width(), self.winfo_height()
+        bg_image = bg_image.resize((width, height), Image.ANTIALIAS)
+        self.bgImage = ImageTk.PhotoImage(bg_image)
+
+        # Créer un conteneur Frame pour l'image de fond et la centrer
+        self.bgContainer = Frame(self, width=width, height=height, bg='white')
+        self.bgContainer.pack_propagate(0)  # Empêcher le redimensionnement du cadre
+        self.bgContainer.pack(fill=BOTH, expand=YES)
+
+        # Ajouter l'image de fond dans le conteneur Frame
+        self.bgLabel = Label(self.bgContainer, image=self.bgImage)
+        self.bgLabel.place(relx=0.5, rely=0.5, anchor=CENTER)
