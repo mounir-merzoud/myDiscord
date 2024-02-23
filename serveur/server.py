@@ -1,7 +1,7 @@
 import socket
 import threading
 
-HOST ="192.168.136.1"
+HOST ="10.10.90.50"
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, port))  # Utilisez un tuple pour spécifier l'adresse et le port
