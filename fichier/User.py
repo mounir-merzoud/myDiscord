@@ -67,7 +67,7 @@ class User(Tk):
         
         # Connexion à la base de données:
         try:
-            connection = mysql.connector.connect(
+            connection = mysql.connector(
                 host="plesk.students-laplateforme.io",  # Adresse de votre serveur MySQL
                 port="3306",  # Port par défaut de MySQL
                 user="mounir",  # Nom d'utilisateur de la base de données MySQL
@@ -88,6 +88,7 @@ class User(Tk):
     def show(self):
         self.openeye.config(file='images/openeye.png')
         self.passwordEntry.config(show='')
+        
         self.eyeButton.config(command=self.hide)
 
     def user_enter(self, event):
