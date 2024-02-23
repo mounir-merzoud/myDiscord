@@ -67,7 +67,7 @@ class User(Tk):
         
         # Connexion à la base de données:
         try:
-            connection = mysql.connector(
+            connection = mysql.connector.connect(
                 host="plesk.students-laplateforme.io",  # Adresse de votre serveur MySQL
                 port="3306",  # Port par défaut de MySQL
                 user="mounir",  # Nom d'utilisateur de la base de données MySQL
