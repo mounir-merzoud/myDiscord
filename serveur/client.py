@@ -3,7 +3,6 @@ import threading
 import tkinter.scrolledtext
 from tkinter import simpledialog, Tk, Label, Text, Button
 import pymysql.cursors
-import hashlib
 
 HOST = "10.10.90.50"
 PORT = 9090
@@ -30,9 +29,9 @@ class Client:
         try:
             with connection.cursor() as cursor:
                 # Recherche de l'utilisateur dans la base de données
+
                 sql = "SELECT * FROM `users` WHERE `username`=%s AND `password`=%s"
-                hashed_password = hashlib.sha256(self.password.encode()).hexdigest()
-                cursor.execute(sql, (self.username, hashed_password))
+                cursor.execute(sql, (self.username, self.password))
                 user = cursor.fetchone()
                 if user:
                     print("Authentification réussie.")
@@ -104,5 +103,6 @@ class Client:
                 self.sock.close()
                 break
 
-# Initialisation du client
-client = Client(HOST, PORT)
+if __name__ == "__main__":
+    # Initialisation du client
+    client = Client(HOST, PORT)
