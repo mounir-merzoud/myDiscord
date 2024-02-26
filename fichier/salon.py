@@ -12,34 +12,13 @@ def connexion():
 
     # Connexion à la base de données MySQL
     try:
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cc3eae81a340ccdd586ffb2125951780b08036b7
->>>>>>> message
         connection = mariadb.connect(
             host="plesk.students-laplateforme.io",
             port=3306,  
             user="mounir",
             password="mounir-1992",
             database="kamelia-mohamdi_mydiscord"
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-        connection = mysql.connector.connect(
-            host="localhost",  # Remplacez localhost par l'adresse de votre serveur MySQL
-            user="user",  # Remplacez votre_utilisateur par le nom d'utilisateur de votre base de données MySQL
-            password="Mounir-1992",  # Remplacez votre_mot_de_passe par le mot de passe de votre base de données MySQL
-            database="mounir-merzoud_mydiscord"  # Remplacez mounir_merzoud_mydiscord par le nom de votre base de données MySQL
->>>>>>> user
-=======
->>>>>>> cc3eae81a340ccdd586ffb2125951780b08036b7
->>>>>>> message
         )
         print("Connexion réussie à la base de données")
         # Écrivez ici votre code pour vérifier l'authentification de l'utilisateur avec l'email et le mot de passe

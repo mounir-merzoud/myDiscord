@@ -1,3 +1,4 @@
+
 import mariadb
 import mysql.connector
 from tkinter import *
@@ -7,7 +8,7 @@ class User(Tk):
     def __init__(self):
         super().__init__()
 
-        self.geometry('990x860+50+50')
+        self.geometry('790x850')
         self.resizable(0.5, 0.5)
         self.title('Login Page')
 
@@ -30,7 +31,7 @@ class User(Tk):
         #self.heading.place(x=380, y=360)
 
         self.usernameEntry = Entry(self, width=27, font=('Comic Sans MS', 11, 'bold'), bd=0, fg='navy',bg="light Sky Blue")
-        self.usernameEntry.place(x=250, y=390)
+        self.usernameEntry.place(x=190, y=390)
         self.usernameEntry.insert(0, 'Nom ou Email')
         self.usernameEntry.bind('<FocusIn>',self.user_enter)
 
@@ -38,28 +39,28 @@ class User(Tk):
         #self.frame1.place(x=250, y=460)
 
         self.passwordEntry = Entry(self, width=25, font=('Comic Sans MS', 11, 'bold'), bd=1.4, fg='navy', bg="light Sky Blue")
-        self.passwordEntry.place(x=250, y=430)
+        self.passwordEntry.place(x=190, y=430)
         self.passwordEntry.insert(0, 'Mot de pass')
         self.passwordEntry.bind('<FocusIn>',self.password_enter)
 
         self.openeye = PhotoImage(file='images/openeye.png')
         self.eyeButton = Button(self, image=self.openeye, bd=0, activebackground='white', cursor='hand2',command=self.hide)
-        self.eyeButton.place(x=470, y=430)
+        self.eyeButton.place(x=410, y=430)
 
         self.forgetButton = Button(self, text='Mot de pass oublier ?', bd=0, activebackground='white',bg="light Sky Blue"
                             , cursor='hand2', font=('Comic Sans MS', 8, 'bold'), fg='navy', activeforeground='black')
-        self.forgetButton.place(x=250, y=470)
+        self.forgetButton.place(x=190, y=470)
 
         self.loginButton = Button(self, text='se connecter', font=('Comic Sans MS', 16, 'bold'), fg='navy'
                        , bg='light Sky Blue', activeforeground='white', activebackground='black', cursor='hand2',bd=2, width=25)
-        self.loginButton.place(x=310, y=510)
+        self.loginButton.place(x=190, y=510)
 
         self.signupLabel = Label(self, text='Ne pas de compte ?', font=('Comic Sans MS',12,'bold'), fg='navy', bg="light Sky Blue")
-        self.signupLabel.place(x=250, y=590)
+        self.signupLabel.place(x=190, y=590)
 
         self.newaccountButton = Button(self, text='Inscréption', font=('Comic Sans MS', 10, 'bold underline'), fg='navy'
                            , bg='light Sky Blue', activeforeground='black', activebackground='white', cursor='hand2')
-        self.newaccountButton.place(x=455, y=590)
+        self.newaccountButton.place(x=415, y=590)
 
         
         # Connexion à la base de données:
@@ -104,4 +105,5 @@ class User(Tk):
 if __name__ == "__main__":
     app = User()
     app.mainloop()
+
 
