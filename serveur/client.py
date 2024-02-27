@@ -118,7 +118,7 @@ from PIL import Image, ImageTk
 import pymysql.cursors  
 import mariadb  
 
-HOST = "10.10.93.114"
+HOST = "10.10.95.62"
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
