@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import socket  
 import threading  
 import tkinter.scrolledtext  
@@ -9,6 +10,19 @@ import pymysql.cursors
 import mariadb  
 
 HOST = "192.168.166.61"
+=======
+
+import socket  
+import threading  
+import tkinter.scrolledtext  
+from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
+from tkinter import PhotoImage
+from ttkthemes import ThemedStyle 
+from PIL import Image, ImageTk 
+import mariadb  
+
+HOST = "10.10.95.62"
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
@@ -48,8 +62,12 @@ class Client:
                     print("Erreur d'authentification.")
         finally:
             connection.close()
+<<<<<<< HEAD
 
     # Méthode pour commencer le chat
+=======
+# Méthode pour commencer le chat
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
     def start_chat(self):
         self.gui_done = False  
         self.running = True  
@@ -81,8 +99,12 @@ class Client:
         self.logout_button = Button(self.left_frame, text="Déconnexion", command=self.logout, bg="red")
         self.logout_button.pack(fill="x", pady=5)
 
+<<<<<<< HEAD
         # Charger l'image dans le thread principal
         self.load_background_image()
+=======
+        
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
@@ -102,8 +124,12 @@ class Client:
         self.msg_label = Label(self.win, text="Message")
         self.msg_label.configure(font="Arial 12", background=style.lookup('TLabel', 'background'), foreground=style.lookup('TLabel', 'foreground'))
         self.msg_label.pack(padx=20, pady=5)
+<<<<<<< HEAD
 
         # Champ de texte pour entrer le message
+=======
+# Champ de texte pour entrer le message
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
         self.input_field = Text(self.win, height=3)
         self.input_field.pack(padx=20, pady=5)
 
@@ -125,9 +151,13 @@ class Client:
 
         self.win.mainloop()  
 
+<<<<<<< HEAD
     # Méthode pour charger l'image de fond dans le thread principal
     def load_background_image(self):
         self.bg_image = Image.open('images/Design sans titre.png')
+=======
+   
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
 
     # Méthode pour envoyer un message
     def send_message(self):
@@ -141,9 +171,14 @@ class Client:
         self.running = False  
         self.win.destroy()  
         self.sock.close()  
+<<<<<<< HEAD
         exit(0)  
 
     # Méthode pour recevoir des messages
+=======
+        exit(0)
+# Méthode pour recevoir des messages
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
     def receive(self):
         while self.running:
             try:
@@ -196,3 +231,6 @@ class Client:
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
+    
+
+

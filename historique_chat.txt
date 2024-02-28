@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 
 merzoud : SALUT
 
@@ -55,3 +56,5 @@ merzoud : ôieoffdkds
 merzoud : ôieoffdkds
 
 
+=======
+>>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26

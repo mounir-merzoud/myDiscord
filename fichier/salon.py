@@ -12,6 +12,7 @@ def connexion():
 
     # Connexion à la base de données MySQL
     try:
+
         connection = mariadb.connect(
             host="plesk.students-laplateforme.io",
             port=3306,  

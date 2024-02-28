@@ -37,29 +37,3 @@ def accept_incoming_connections():
         pass  
 """ 
 
-import mariadb
-from tkinter import *
-from PIL import Image, ImageTk
-
-class User(Tk):
-    def __init__(self):
-        super().__init__()
-
-        self.geometry('1024x670+50+50')
-        self.resizable(0, 0)
-        self.title('Login Page')
-
-        # Charger l'image de fond et ajuster sa taille
-        bg_image = Image.open('images/Design sans titre.png')
-        width, height = self.winfo_width(), self.winfo_height()
-        bg_image = bg_image.resize((width, height), Image.ANTIALIAS)
-        self.bgImage = ImageTk.PhotoImage(bg_image)
-
-        # Créer un conteneur Frame pour l'image de fond et la centrer
-        self.bgContainer = Frame(self, width=width, height=height, bg='white')
-        self.bgContainer.pack_propagate(0)  # Empêcher le redimensionnement du cadre
-        self.bgContainer.pack(fill=BOTH, expand=YES)
-
-        # Ajouter l'image de fond dans le conteneur Frame
-        self.bgLabel = Label(self.bgContainer, image=self.bgImage)
-        self.bgLabel.place(relx=0.5, rely=0.5, anchor=CENTER)
