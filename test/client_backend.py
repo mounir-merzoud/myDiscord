@@ -9,100 +9,23 @@ import mariadb
 
 HOST = "10.10.95.89"
 PORT = 9090
-
-# Fonction pour enregistrer les messages dans un fichier
-def enregistrer_message(message):
-    with open("historique_chat.txt", "a") as file:
-        file.write(message + "\n")
-
-# Définition de la classe Client
-class Client:
+class ClientBackend:
     def __init__(self, host, port):
+        self.host = host
+        self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
-        self.login_window = None  # Pour stocker la fenêtre de connexion
-        self.openeye = None  # Pour stocker l'image de l'oeil
-        self.start_login()
-    
-    def start_login(self):
-        # Afficher la fenêtre de connexion
-        self.login_window = Tk()
-        self.login_window.geometry('990x660+50+50')
-        self.login_window.resizable(0,0)
-        self.login_window.title('Login Page')
-        
-        # Interface utilisateur de connexion
-        bgImage=ImageTk.PhotoImage(file='images/bg.jpg')
-        bgLabel=Label(self.login_window, image=bgImage)
-        bgLabel.pack()
-        
-        heading=Label(self.login_window, text='Utilisateur', font=('Comic Sans MS', 23, 'bold'), bg='white', fg='firebrick1')
-        heading.place(x=610, y=120)
-        
-        self.usernameEntry=Entry(self.login_window, width=25, font=('Comic Sans MS', 11, 'bold'), bd=0, fg='firebrick1')
-        self.usernameEntry.place(x=580, y=200)
-        self.usernameEntry.insert(0, 'Nom ou Email')
-        self.usernameEntry.bind('<FocusIn>', self.user_enter)
-        
-        frame1=Frame(self.login_window, width=250, height=2, bg='firebrick1') 
-        frame1.place(x=580, y=222)
-        
-        self.passwordEntry=Entry(self.login_window, width=25, font=('Comic Sans MS', 11, 'bold'), bd=0, fg='firebrick1')
-        self.passwordEntry.place(x=580, y=260)
-        self.passwordEntry.insert(0, 'Mot de passe')
-        self.passwordEntry.bind('<FocusIn>', self.password_enter)
-        
-        frame2=Frame(self.login_window, width=250, height=2, bg='firebrick1')
-        frame2.place(x=580, y=282)
-        
-        self.openeye=PhotoImage(file='images/openeye.png')
-        self.eyeButton=Button(self.login_window, image=self.openeye, bd=0, bg='white', activebackground='white', cursor='hand2', command=self.hide)
-        self.eyeButton.place(x=800, y=255)
-        
-        forgetButton=Button(self.login_window, text='Mot de passe oublié ?', bd=0, bg='white', activebackground='white',
-                            cursor='hand2', font=('Comic Sans MS', 8, 'bold'), fg='firebrick1', activeforeground='black')
-        forgetButton.place(x=715, y=295)
-        
-        loginButton=Button(self.login_window, text='Se connecter', font=('Comic Sans MS', 16, 'bold'), fg='white', bg='firebrick1',
-                           activeforeground='black', activebackground='white', cursor='hand2', bd=0, width=19, command=self.login)
-        loginButton.place(x=578, y=350)
-        
-        # Create a clickable Google button
-        google_logo=PhotoImage(file='images/google.png')
-        googleButton=Button(self.login_window, image=google_logo, bd=0, bg='white', activebackground='white', cursor='hand2', command=self.google_login)
-        googleButton.place(x=680, y=440)
-        
-        signupLabel=Label(self.login_window, text='Pas encore de compte ?', font=('Comic Sans MS',12,'bold'), fg='firebrick1', bg='white')
-        signupLabel.place(x=575, y=500)
-        
-        newaccountButton=Button(self.login_window, text='Créer un compte', font=('Comic Sans MS', 9, 'bold underline'), fg='black',
-                                bg='white', activeforeground='black', activebackground='white', cursor='hand2', bd=0, command=self.signup_page)
-        newaccountButton.place(x=727, y=500)
-        
-        self.login_window.mainloop()
 
-    def user_enter(self, event):
-        if self.usernameEntry.get() == 'Nom ou Email':
-            self.usernameEntry.delete(0, END)
-
-    def password_enter(self, event):
-        if self.passwordEntry.get() == 'Mot de passe':
-            self.passwordEntry.delete(0, END)
-
-    def hide(self):
-        self.openeye.config(file='images/closeye.png')
-        self.passwordEntry.config(show='*')
-        self.eyeButton.config(command=self.show)
-
-    def show(self):
-        self.openeye.config(file='images/openeye.png')
-        self.passwordEntry.config(show='')
-        self.eyeButton.config(command=self.hide)
+    # Fonction pour enregistrer les messages dans un fichier
+    def enregistrer_message(self, message):
+        with open("historique_chat.txt", "a") as file:
+            file.write(message + "\n")
 
     # Function to be executed when Google button is clicked
     def google_login(self):
         # Add your code here to handle Google login
         print("Google login clicked")
+
     def signup_page(self):
         self.login_window.destroy()
         import userup
@@ -127,14 +50,12 @@ class Client:
                 user = cursor.fetchone()
                 if user:
                     print("Authentification réussie.")
-                    self.start_chat(cursor)  
+                    self.start_chat(cursor)  # Passer cursor comme argument
                     self.show_user_list(cursor)
                 else:
                     print("Erreur d'authentification.")
         finally:
             connection.close()
-
-
 
     # Méthode pour démarrer le chat
     def start_chat(self, cursor):
@@ -144,7 +65,6 @@ class Client:
         receive_thread = threading.Thread(target=self.receive)  
         gui_thread.start()  
         receive_thread.start()  
-    
 
     # Méthode pour boucler l'interface utilisateur
     def gui_loop(self):
@@ -168,7 +88,6 @@ class Client:
 
         self.logout_button = Button(self.left_frame, text="Déconnexion", command=self.logout, bg="red")
         self.logout_button.pack(fill="x", pady=5)
-
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
@@ -211,13 +130,12 @@ class Client:
 
         self.win.mainloop()  
 
-
     # Méthode pour envoyer un message
     def send_message(self):
         message = f"{self.username} : {self.input_field.get('1.0', 'end')}"
         self.input_field.delete('1.0', 'end')
         self.sock.send(message.encode("utf-8"))  
-        enregistrer_message(message)  
+        self.enregistrer_message(message)  
 
     # Méthode pour arrêter le client
     def stop(self):
@@ -225,7 +143,8 @@ class Client:
         self.win.destroy()  
         self.sock.close()  
         exit(0)
-# Méthode pour recevoir des messages
+
+    # Méthode pour recevoir des messages
     def receive(self):
         while self.running:
             try:
@@ -238,7 +157,7 @@ class Client:
                         self.text_area.insert("end", message.decode())
                         self.text_area.yview("end")
                         self.text_area.config(state="disabled")
-                        enregistrer_message(message.decode())  
+                        self.enregistrer_message(message.decode())  
             except ConnectionAbortedError:
                 break  
             except:
@@ -261,14 +180,14 @@ class Client:
             if user[0] != self.username:  # Ne pas afficher l'utilisateur connecté lui-même
                 user_label = Label(user_list_window, text=user[0])
                 user_label.grid(row=i, column=0, padx=10, pady=5)
-    
+
     # Méthodes pour ouvrir les fenêtres des différentes fonctionnalités
     def open_users_window(self):
         pass  # Remplir cette méthode pour afficher la fenêtre des utilisateurs
-    
+
     def open_option_window(self):
         pass  # Remplir cette méthode pour afficher la fenêtre des options
-    
+
     def open_info_window(self):
         pass  # Remplir cette méthode pour afficher la fenêtre d'informations
 
@@ -276,6 +195,4 @@ class Client:
         pass  # Remplir cette méthode pour gérer la déconnexion
 
 if __name__ == "__main__":
-    # Initialisation du client
-    client = Client(HOST, PORT)
-    
+    client_backend = ClientBackend(HOST, PORT)

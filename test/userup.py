@@ -108,7 +108,7 @@ def connect_database():
 
 def login_page():
     userup_window.destroy()
-    import client_backend 
+    import client_backend
 
 userup_window=Tk()
 userup_window.title('Userup Page')
