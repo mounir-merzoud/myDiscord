@@ -3,6 +3,7 @@ from PIL import ImageTk
 from tkinter import messagebox
 import mariadb
 from userup import UserUp
+from MotDePass import forget_pass
 
 
 
@@ -24,16 +25,12 @@ def login_user():
         query='use user' 
         mycursor.execute(query)
         query='select * from user where username=%s and mot_de_passe=%s'
-        mycursor.execute(query, usernameEntry.get(), passwordEntry.get())
+        mycursor.execute(query, (usernameEntry.get(), passwordEntry.get()))
         row=mycursor.fetchone()
         if row == None:
             messagebox.showerror('Error', 'Username, Nom d\'utilisateur ou mot de passe invalide') 
         else:
             messagebox.showinfo('Succès, la connexion est établie')    
-
-
-
-
 
 def signup_page():
     login_window.destroy()
@@ -96,7 +93,7 @@ eyeButton=Button(login_window, image=openeye,bd=0, bg='white', activebackground=
 eyeButton.place(x=800, y=255)
 
 forgetButton=Button(login_window, text='Mot de pass oublier ?',bd=0, bg='white', activebackground='white'
-                    , cursor='hand2', font=('Comic Sans MS', 8, 'bold'), fg='firebrick1', activeforeground='black')
+                    , cursor='hand2', font=('Comic Sans MS', 8, 'bold'), fg='firebrick1', activeforeground='black', command=forget_pass)
 forgetButton.place(x=715, y=295)
 
 loginButton=Button(login_window,text='se connecter', font=('Comic Sans MS', 16, 'bold'), fg='white'
