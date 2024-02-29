@@ -110,3 +110,73 @@ bik : yes
 
 bik : yes 
 
+bik : hi
+
+
+bik : hi
+
+ connecté au serveur
+
+Connecté au serveur mohamdi : hi
+
+ connecté au serveur
+
+bik : hi
+
+bik : hi
+
+bik : 
+
+bik : 
+
+mohamdi : tu vas bien
+
+bik : 
+
+bik : 
+
+mohamdi : tu m'as envoyé un message vide 
+
+bik : 
+
+
+yes yes j'ai vue
+
+
+
+bik : 
+
+
+yes yes j'ai vue
+
+
+
+mohamdi : hgg
+
+mohamdi : 
+
+mohamdi : 
+
+mohamdi : 
+
+mohamdi : 
+
+bik : hggf
+
+bik : gfjfj
+
+bik : hi 
+
+bik : hi 
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : tu vas bien ?
+
+
+bik : non 
+
+bik : non 
+
+mohamdi : merci
+
