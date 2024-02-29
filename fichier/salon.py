@@ -33,7 +33,7 @@ champ_reception.grid(row=0, column=0, padx=10, pady=10)
 
 # Créer un cadre blanc pour le formulaire
 formulaire_cadre = tk.Frame(fenetre, bg="white", width=200, height=80)
-formulaire_cadre.place(x=10, y=100)  # Utilisation de la méthode place pour positionner le cadre
+formulaire_cadre.place(x=10, y=600)  # Utilisation de la méthode place pour positionner le cadre
 
 # Champ de texte pour saisir le message
 champ_message = Text(formulaire_cadre, height=5, width=50)
