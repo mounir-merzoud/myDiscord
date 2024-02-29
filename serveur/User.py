@@ -1,11 +1,84 @@
-from tkinter import *
+"""from tkinter import *
 from PIL import ImageTk
+from tkinter import messagebox
+import mariadb
+from userup import UserUp
+
 
 
 #Functionality Part
+def login_user():
+    if usernameEntry.get() == '' or passwordEntry.get() == '':
+        messagebox.showerror('Error', 'Veuillez remplir tous les champs')
+    else:
+        try: 
+            con=mariadb.connect(user='mounir-merzoudy',
+                                    password='Mounir-1992',
+                                    host='82.165.185.52',
+                                    port=3306,
+                                    database='mounir-merzoud_myDiscord')
+            mycursor = con.cursor()
+        except:
+            messagebox.showerror('La connexion n\'est pas établie, veuillez réessaye')
+            return
+        query='use user' 
+        mycursor.execute(query)
+        query='select * from user where username=%s and mot_de_passe=%s'
+        mycursor.execute(query, usernameEntry.get(), passwordEntry.get())
+        row=mycursor.fetchone()
+        if row == None:
+            messagebox.showerror('Error', 'Username, Nom d\'utilisateur ou mot de passe invalide') 
+        else:
+            messagebox.showinfo('Succès, la connexion est établie')    """
+
+from tkinter import *
+from tkinter import messagebox
+import mariadb
+from userup import UserUp
+from tkinter import  Tk, Label, Text, Button, Toplevel, Frame
+from tkinter import PhotoImage
+from ttkthemes import ThemedStyle
+from PIL import Image, ImageTk
+from client import Client
+
+# Définissez votre classe Client ici
+
+def open_chat_window():
+    global chat_client
+    HOST = "10.10.95.89"
+    PORT = 9090
+    username = usernameEntry.get()  # Récupérer le nom d'utilisateur
+    password = passwordEntry.get()  # Récupérer le mot de passe
+    chat_client = Client(HOST, PORT, username, password)  # Passer le nom d'utilisateur et le mot de passe à Client
+    login_window.destroy()
+
+
+def login_user():
+    if usernameEntry.get() == '' or passwordEntry.get() == '':
+        messagebox.showerror('Error', 'Veuillez remplir tous les champs')
+    
+    con = mariadb.connect(user='mounir-merzoudy',
+                                  password='Mounir-1992',
+                                  host='82.165.185.52',
+                                  port=3306,
+                                  database='mounir-merzoud_myDiscord')
+    mycursor = con.cursor()
+    try:
+            with con.cursor() as cursor:
+                sql = "SELECT * FROM `user` WHERE `username`=%s AND `mot_de_passe`=%s"
+                cursor.execute(sql, (usernameEntry.get(), passwordEntry.get()))
+                user = cursor.fetchone()
+                if user:
+                    print("Authentification réussie.")
+                    open_chat_window() 
+                else:
+                    print("Erreur d'authentification.")
+    finally:
+        con.close() 
+
 def signup_page():
     login_window.destroy()
-    import userup
+    user_up = UserUp()
 
 def hide():
     openeye.config(file='images/closeye.png')
@@ -68,7 +141,7 @@ forgetButton=Button(login_window, text='Mot de pass oublier ?',bd=0, bg='white',
 forgetButton.place(x=715, y=295)
 
 loginButton=Button(login_window,text='se connecter', font=('Comic Sans MS', 16, 'bold'), fg='white'
-                   , bg='firebrick1', activeforeground='black', activebackground='white', cursor='hand2',bd=0, width=19)
+                   , bg='firebrick1', activeforeground='black', activebackground='white', cursor='hand2',bd=0, width=19, command=login_user)
 loginButton.place(x=578, y=350)
 
 # Create a clickable Google button
@@ -84,7 +157,6 @@ newaccountButton=Button(login_window,text='Create New', font=('Comic Sans MS', 9
 newaccountButton.place(x=727, y=500)
 
 login_window.mainloop()
-
 
 
 
