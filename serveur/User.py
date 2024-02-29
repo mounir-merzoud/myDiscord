@@ -1,35 +1,3 @@
-"""from tkinter import *
-from PIL import ImageTk
-from tkinter import messagebox
-import mariadb
-from userup import UserUp
-
-
-
-#Functionality Part
-def login_user():
-    if usernameEntry.get() == '' or passwordEntry.get() == '':
-        messagebox.showerror('Error', 'Veuillez remplir tous les champs')
-    else:
-        try: 
-            con=mariadb.connect(user='mounir-merzoudy',
-                                    password='Mounir-1992',
-                                    host='82.165.185.52',
-                                    port=3306,
-                                    database='mounir-merzoud_myDiscord')
-            mycursor = con.cursor()
-        except:
-            messagebox.showerror('La connexion n\'est pas établie, veuillez réessaye')
-            return
-        query='use user' 
-        mycursor.execute(query)
-        query='select * from user where username=%s and mot_de_passe=%s'
-        mycursor.execute(query, usernameEntry.get(), passwordEntry.get())
-        row=mycursor.fetchone()
-        if row == None:
-            messagebox.showerror('Error', 'Username, Nom d\'utilisateur ou mot de passe invalide') 
-        else:
-            messagebox.showinfo('Succès, la connexion est établie')    """
 
 from tkinter import *
 from tkinter import messagebox
@@ -70,9 +38,11 @@ def login_user():
                 user = cursor.fetchone()
                 if user:
                     print("Authentification réussie.")
+                    messagebox.showinfo('Succès', 'La connexion est établie ')
                     open_chat_window() 
                 else:
                     print("Erreur d'authentification.")
+                    messagebox.showerror('Error' , 'Nom d\'utilisateur ou mot de passe invalide')
     finally:
         con.close() 
 
