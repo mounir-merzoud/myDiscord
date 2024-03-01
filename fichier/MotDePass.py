@@ -2,9 +2,41 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk
 from tkinter import Toplevel
-
 import mariadb
 
+"""
+def forget_pass():
+    def change_password():
+        if usernom_entry.get()=='' or newpassword_entry.get()=='' or Confirmi_passentry.get()=='':
+           messagebox.showerror('Error','All fileds are required', parent=window)
+        elif newpassword_entry.get()!= Confirmi_passentry.get():
+            messagebox.showerror('Error', 'Password and confirm password are not matching', parent=window)
+        else:
+            try:
+                con=mariadb.connect(user='mounir-merzoudy',
+                                        password='Mounir-1992',
+                                        host='82.165.185.52',
+                                        port=3306,
+                                        database='mounir-merzoud_myDiscord')
+                mycursor = con.cursor()
+                #query = 'use mounir-merzoud_myDiscord' 
+                #mycursor.execute(query)
+                query = 'select * from user where username=%s and mot_de_passe=%s'
+                mycursor.execute(query, (usernom_entry.get()))
+                row=mycursor.fetchone()
+                if row==None:
+                    messagebox.showerror('Error', 'Incorrect Username', parent=window)
+                else:
+                    query = 'update user set username=%s where mot_de_passe=%s'
+                    mycursor.execute(query,(newpassword_entry.get(),usernom_entry.get()))
+                    con.commit()
+                    con.close()
+                    messagebox.showinfo('Success', 'Password is reset, please login with with new password', parent=window)
+                    window.destroy()
+            except mariadb.Error as error:
+                messagebox.showerror('Error', str(error), parent=window)        
+
+"""
 
 def forget_pass():
     def change_password():
@@ -13,28 +45,31 @@ def forget_pass():
         elif newpassword_entry.get()!= Confirmi_passentry.get():
             messagebox.showerror('Error', 'Password and confirm password are not matching', parent=window)
         else:
-            con=mariadb.connect(user='mounir-merzoudy',
-                                    password='Mounir-1992',
-                                    host='82.165.185.52',
-                                    port=3306,
-                                    database='mounir-merzoud_myDiscord')
-            mycursor = con.cursor()
-            query = 'use `mounir-merzoud_myDiscord`'  
-            mycursor.execute(query)
-            query = 'select * from `user` where `username`=%s and `mot_de_passe`=%s'
+            try:
+                con=mariadb.connect(user='mounir-merzoudy',
+                                        password='Mounir-1992',
+                                        host='82.165.185.52',
+                                        port=3306,
+                                        database='mounir-merzoud_myDiscord')
+                mycursor = con.cursor()
+            except mariadb.Error as error:
+                messagebox.showerror('Error', str(error), parent=window) 
+                return    
+            #query = 'use mounir-merzoud_myDiscord' 
+            #mycursor.execute(query)
+            query = 'select * from user where username=%s'
             mycursor.execute(query, (usernom_entry.get(),))
             row=mycursor.fetchone()
             if row==None:
                 messagebox.showerror('Error', 'Incorrect Username', parent=window)
             else:
-                query = 'update `user` set `mot_de_passe`=%s where `username`=%s'
-                mycursor.execute(query,(newpassword_entry.get(),usernom_entry.get()))
+                query = 'update user set mot_de_passe=%s where username=%s'
+                mycursor.execute(query, (newpassword_entry.get(), usernom_entry.get()))
                 con.commit()
                 con.close()
                 messagebox.showinfo('Success', 'Password is reset, please login with with new password', parent=window)
                 window.destroy()
-
-        
+     
        
     window = Toplevel()
     window.title('modifier le mot de passe')
