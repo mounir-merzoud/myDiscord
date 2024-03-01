@@ -1,7 +1,9 @@
+
 import socket
 import threading
 
-HOST ="10.10.95.89"
+HOST ="10.10.101.10"
+
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, port))  
@@ -42,6 +44,6 @@ def recevoir():
         client.send("Connecté au serveur ".encode("utf-8"))
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
+print("attente de connexion...")
 
-print("Attente de connexion...")
 recevoir()

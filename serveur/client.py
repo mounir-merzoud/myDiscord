@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 import pymysql.cursors  
 import mariadb  
 
-HOST = "10.10.95.89"
+HOST = "10.10.101.10"
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
@@ -24,7 +24,7 @@ class Client:
         self.msg = Tk()
         self.msg.withdraw()
         self.username = username  # Stocker le nom d'utilisateur dans un attribut de classe
-        self.password = password  # Stocker le mot de passe dans un attribut de classe
+        self.password = password 
         self.authenticate()
 
 
