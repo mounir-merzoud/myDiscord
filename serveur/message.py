@@ -1,10 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 import json
 import pyaudio
 import wave
 import socket
-import os
 
 # Configuration du socket client
 SERVER_ADDRESS = '82.165.185.52'  # Adresse IP du serveur
@@ -112,6 +111,29 @@ def send_data_to_server(message, audio_path):
     except Exception as e:
         print(f"Erreur lors de l'envoi des données au serveur : {e}")
 
+# Fonction pour envoyer une photo
+def send_photo():
+    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png")])
+    if file_path:
+        send_generic_file(file_path)
+
+# Fonction pour envoyer un fichier
+def send_generic_file(file_path):
+    try:
+        client_socket.connect((SERVER_ADDRESS, SERVER_PORT))
+        with open(file_path, "rb") as file:
+            file_data = file.read()
+            client_socket.sendall(file_data)
+        print(f"Le fichier {file_path} a été envoyé avec succès.")
+    except Exception as e:
+        print(f"Erreur lors de l'envoi du fichier au serveur : {e}")
+
+# Fonction pour envoyer une vidéo
+def send_video():
+    file_path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4;*.avi;*.mkv")])
+    if file_path:
+        send_generic_file(file_path)
+
 # Création de la fenêtre principale
 root = tk.Tk()
 root.title("Message")
@@ -157,6 +179,14 @@ send_button.pack(side=tk.LEFT, padx=5)
 # Bouton pour enregistrer un mémo vocal
 record_button = ttk.Button(input_frame, text="🎤", command=record_audio)
 record_button.pack(side=tk.LEFT, padx=5)
+
+# Bouton pour envoyer une photo
+photo_button = ttk.Button(input_frame, text="📷", command=send_photo)
+photo_button.pack(side=tk.LEFT, padx=5)
+
+# Bouton pour envoyer une vidéo
+video_button = ttk.Button(input_frame, text="🎥", command=send_video)
+video_button.pack(side=tk.LEFT, padx=5)
 
 # Bouton pour afficher la liste d'emojis
 def show_emojis():
