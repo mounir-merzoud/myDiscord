@@ -34,7 +34,7 @@ def login_user():
 
 def signup_page():
     login_window.destroy()
-    user_up = UserUp()
+    UserUp()
 
 def hide():
     openeye.config(file='images/closeye.png')
