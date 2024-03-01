@@ -1,115 +1,51 @@
-bik : CC
-
-
-bik : CC
-
- connecté au serveur
-
-Connecté au serveur 
-bik : gfgggg
-
-bik : hdhgg
-
-bik : dfgggg
-
-bik : hfgjgcfyjtgh
-
-bik : fcffff
-
-bik : SDGBWDFOJ
-
-bik : SDGBWDFOJ
- connecté au serveur
-
-Connecté au serveur 
-merzoud : JYFGKUH
-
-bik : hi
-
-bik : hi
- connecté au serveur
-
-Connecté au serveur 
-mohamdi : tu vas bien ?
-
-bik : yes cv cv 
-
-bik : yes cv cv 
-
-bik : et toi 
-
-bik : et toi 
-
-mohamdi : wa arrab ibarek al jamiii3
-
-bik : jhjjh
-
-bik : jhjjh
- connecté au serveur
-
-Connecté au serveur 
-merzoud : ERFREFESSDWFSTDF
- connecté au serveur
-
-bik : hggff
-
-bik : hggff
 
 mohamdi : hi
+
+
+SURNOM
+mohamdi : hi
+
  connecté au serveur
+Connecté au serveur 
+bik : hi
 
-bik : hg
+bik : 
 
+mohamdi : tu vas bien
 
-bik : hg
+mohamdi : tu vas bien
 
+bik : 
 
-mohamdi : c'est booon 
+mohamdi : tu m'as envoyé un message vide 
 
-merzoud : parfait
+mohamdi : tu m'as envoyé un message vide 
 
-
-merzoud : fefdfdfqsd
-
-
-bik : gfbd
-
-bik : gfbd
-
-bik : fdfdgsg
-
-bik : fdfdgsg
-
-merzoud : ôieoffdkds
+bik : 
 
 
-bik : fhf
+yes yes j'ai vue
 
-bik : fhf
+
+
+mohamdi : cc
+
+mohamdi : cc
  connecté au serveur
 
 Connecté au serveur 
-bik : gfgf
-
-bik : gfgf
-
-bik : hi
-
-bik : hi
-
-mohamdi : t'es là
+bik : hi 
  connecté au serveur
 
-bik : hi 
+mohamdi : tu vas bien ?
 
-bik : hi 
 
-mohamdi : t'es la 
+mohamdi : tu vas bien ?
 
-bik : yes 
 
-bik : yes 
+bik : non 
 
+<<<<<<< HEAD
 bik : hi
 
 
@@ -180,3 +116,39 @@ bik : non
 
 mohamdi : merci
 
+=======
+mohamdi : merci
+
+mohamdi : merci
+
+mohamdi : cc
+
+mohamdi : cc
+ connecté au serveur
+
+Connecté au serveur 
+bik : cc
+
+bik : cc
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : coucouc
+
+mohamdi : coucouc
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : vv
+
+mohamdi : vv
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : ujj
+
+mohamdi : ujj
+ connecté au serveur
+
+Connecté au serveur 
+>>>>>>> message

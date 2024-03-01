@@ -1,10 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 import json
 import pyaudio
 import wave
 import socket
-import os
 
 # Configuration du socket client
 SERVER_ADDRESS = '82.165.185.52'  # Adresse IP du serveur
@@ -112,20 +111,43 @@ def send_data_to_server(message, audio_path):
     except Exception as e:
         print(f"Erreur lors de l'envoi des données au serveur : {e}")
 
+# Fonction pour envoyer une photo
+def send_photo():
+    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png")])
+    if file_path:
+        send_generic_file(file_path)
+
+# Fonction pour envoyer un fichier
+def send_generic_file(file_path):
+    try:
+        client_socket.connect((SERVER_ADDRESS, SERVER_PORT))
+        with open(file_path, "rb") as file:
+            file_data = file.read()
+            client_socket.sendall(file_data)
+        print(f"Le fichier {file_path} a été envoyé avec succès.")
+    except Exception as e:
+        print(f"Erreur lors de l'envoi du fichier au serveur : {e}")
+
+# Fonction pour envoyer une vidéo
+def send_video():
+    file_path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4;*.avi;*.mkv")])
+    if file_path:
+        send_generic_file(file_path)
+
 # Création de la fenêtre principale
 root = tk.Tk()
 root.title("Message")
 
 # Définir le style de la fenêtre et des widgets
-root.configure(bg='blue')  # Couleur de fond rose
+root.configure(bg='LightSalmon')  
 
 # Définir les styles personnalisés
 root.style = ttk.Style()
 root.style.theme_create("custom", parent="clam", settings={
-    "TButton": {"configure": {"background": "navy", "foreground": "white", "font": ("Helvetica", 12)}},
-    "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "navy"}},
-    "TFrame": {"configure": {"background": "medium blue"}},
-    "TText": {"configure": {"background": "navy", "foreground": "white", "font": ("Helvetica", 12)}},
+    "TButton": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
+    "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "salmon3"}},
+    "TFrame": {"configure": {"background": "LightSalmon"}},
+    "TText": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
 })
 root.style.theme_use("custom")
 
@@ -134,7 +156,7 @@ message_frame = ttk.Frame(root)
 message_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 # Zone de texte pour les messages
-message_list = tk.Text(message_frame, bg='navy', fg='white', font=('Helvetica', 12), state=tk.DISABLED)
+message_list = tk.Text(message_frame, bg='salmon3', fg='white', font=('Helvetica', 12), state=tk.DISABLED)
 message_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 # Barre de défilement pour la zone de texte
@@ -147,22 +169,30 @@ input_frame = ttk.Frame(root)
 input_frame.pack(padx=10, pady=10, fill=tk.BOTH)
 
 # Zone de texte pour la saisie de message
-message_input = tk.Text(input_frame, height=3, bg='navy', fg='white', font=('Helvetica', 12))
+message_input = tk.Text(input_frame, height=3, bg='salmon3', fg='white', font=('Helvetica', 12))
 message_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 # Bouton pour envoyer le message
-send_button = ttk.Button(input_frame, text="Envoyer", command=send_message)
+send_button = ttk.Button(input_frame, text="🚀", command=send_message)
 send_button.pack(side=tk.LEFT, padx=5)
 
 # Bouton pour enregistrer un mémo vocal
-record_button = ttk.Button(input_frame, text="Enregistrer Mémo Vocal", command=record_audio)
+record_button = ttk.Button(input_frame, text="🎤", command=record_audio)
 record_button.pack(side=tk.LEFT, padx=5)
+
+# Bouton pour envoyer une photo
+photo_button = ttk.Button(input_frame, text="📷", command=send_photo)
+photo_button.pack(side=tk.LEFT, padx=5)
+
+# Bouton pour envoyer une vidéo
+video_button = ttk.Button(input_frame, text="🎥", command=send_video)
+video_button.pack(side=tk.LEFT, padx=5)
 
 # Bouton pour afficher la liste d'emojis
 def show_emojis():
     emojis_window = tk.Toplevel(root)
-    emojis_window.title("Choisir Emoji")
-    emojis_window.configure(bg='navy')
+    emojis_window.title("😎 ")
+    emojis_window.configure(bg='salmon3')
 
     emojis_frame = ttk.Frame(emojis_window)
     emojis_frame.pack(padx=10, pady=10)
@@ -171,7 +201,7 @@ def show_emojis():
         emoji_button = ttk.Button(emojis_frame, text=emoji, command=lambda e=emoji: insert_emoji(e))
         emoji_button.pack(side=tk.LEFT, padx=5, pady=5)
 
-emoji_button = ttk.Button(input_frame, text="Afficher Emojis", command=show_emojis)
+emoji_button = ttk.Button(input_frame, text="😎 ", command=show_emojis)
 emoji_button.pack(side=tk.LEFT, padx=5)
 
 root.mainloop()
