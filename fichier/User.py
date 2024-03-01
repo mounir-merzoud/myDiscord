@@ -54,10 +54,7 @@ def password_enter(event):
     if passwordEntry.get()=='Mot de pass':
         passwordEntry.delete(0, END)        
 
-# Function to be executed when Google button is clicked
-def google_login():
-    # Add your code here to handle Google login
-    print("Google login clicked")
+
 
 #GUI Part
 login_window=Tk()
@@ -102,8 +99,8 @@ loginButton.place(x=578, y=350)
 
 # Create a clickable Google button
 google_logo=PhotoImage(file='images/google.png')
-googleButton=Button(login_window, image=google_logo, bd=0, bg='white', activebackground='white', cursor='hand2', command=google_login)
-googleButton.place(x=680, y=440)
+googleButton=Button(login_window, image=google_logo, bd=0, bg='white', activebackground='white', cursor='hand2')
+googleButton.place(x=650, y=400)
 
 signupLabel=Label(login_window,text='Ne pas de compte ?', font=('Comic Sans MS',12,'bold'), fg='firebrick1', bg='white')
 signupLabel.place(x=575, y=500)
