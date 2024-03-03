@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 merzoud : SALUT
 
@@ -58,3 +59,85 @@ merzoud : ôieoffdkds
 
 =======
 >>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
+=======
+mohamdi : hi
+
+
+SURNOM
+mohamdi : hi
+
+ connecté au serveur
+Connecté au serveur 
+bik : hi
+
+bik : 
+
+mohamdi : tu vas bien
+
+mohamdi : tu vas bien
+
+bik : 
+
+mohamdi : tu m'as envoyé un message vide 
+
+mohamdi : tu m'as envoyé un message vide 
+
+bik : 
+
+
+yes yes j'ai vue
+
+
+
+mohamdi : cc
+
+mohamdi : cc
+ connecté au serveur
+
+Connecté au serveur 
+bik : hi 
+ connecté au serveur
+
+mohamdi : tu vas bien ?
+
+
+mohamdi : tu vas bien ?
+
+
+bik : non 
+
+mohamdi : merci
+
+mohamdi : merci
+
+mohamdi : cc
+
+mohamdi : cc
+ connecté au serveur
+
+Connecté au serveur 
+bik : cc
+
+bik : cc
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : coucouc
+
+mohamdi : coucouc
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : vv
+
+mohamdi : vv
+ connecté au serveur
+
+Connecté au serveur 
+mohamdi : ujj
+
+mohamdi : ujj
+ connecté au serveur
+
+Connecté au serveur 
+>>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd

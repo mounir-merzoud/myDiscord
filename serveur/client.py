@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import socket  
 import threading  
 import tkinter.scrolledtext  
@@ -12,17 +13,24 @@ import mariadb
 HOST = "192.168.166.61"
 =======
 
+=======
+>>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd
 import socket  
 import threading  
 import tkinter.scrolledtext  
 from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
 from tkinter import PhotoImage
 from ttkthemes import ThemedStyle 
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
+import pymysql.cursors  
 import mariadb  
 
+<<<<<<< HEAD
 HOST = "10.10.95.62"
 >>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
+=======
+HOST = "10.10.101.10"
+>>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
@@ -32,16 +40,17 @@ def enregistrer_message(message):
 
 # Définition de la classe Client
 class Client:
-    def __init__(self, host, port):
+    def __init__(self, host, port, username, password):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
         self.msg = Tk()
         self.msg.withdraw()
+        self.username = username  # Stocker le nom d'utilisateur dans un attribut de classe
+        self.password = password 
         self.authenticate()
 
+
     def authenticate(self):
-        self.username = simpledialog.askstring("Login", "Entrez votre nom d'utilisateur")
-        self.password = simpledialog.askstring("Login", "Entrez votre mot de passe", show="*")
         
         connection = mariadb.connect(user='mounir-merzoudy',
                                      password='Mounir-1992',
@@ -232,5 +241,3 @@ if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
     
-
-

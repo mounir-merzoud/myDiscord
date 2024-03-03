@@ -3,11 +3,16 @@ import socket
 import threading
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 HOST ="192.168.166.61"
 =======
 
 HOST ="10.10.95.89"
 >>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
+=======
+HOST ="10.10.101.10"
+
+>>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, port))  # Utilisez un tuple pour spécifier l'adresse et le port
@@ -48,6 +53,6 @@ def recevoir():
         client.send("Connecté au serveur ".encode("utf-8"))
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
+print("attente de connexion...")
 
-print("Attente de connexion...")
 recevoir()
