@@ -2,12 +2,8 @@
 import socket
 import threading
 
-<<<<<<< HEAD
-HOST ="10.10.99.2"
-=======
-HOST ="10.10.101.10"
 
->>>>>>> message
+HOST ="10.10.101.10"
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, port))  
