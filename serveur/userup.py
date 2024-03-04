@@ -68,6 +68,8 @@ class UserUp:
     def connect_database(self):
         if self.email_entry.get() == '':
             messagebox.showerror('Error', 'Tous les champs sont requis')
+        elif self.MotDePasseEntry.get() != self.ConfirmerEntry.get():
+            messagebox.showerror('Error', 'Non concordance des mots de passe')
         elif self.check.get() == 0:
             messagebox.showerror('Error', 'Veuillez accepter les termes et conditions')    
         else:    
