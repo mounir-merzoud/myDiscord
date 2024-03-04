@@ -30,7 +30,7 @@ def login_user():
                                   host='82.165.185.52',
                                   port=3306,
                                   database='mounir-merzoud_myDiscord')
-    mycursor = con.cursor()
+    cursor = con.cursor()
     try:
             with con.cursor() as cursor:
                 sql = "SELECT * FROM `user` WHERE `username`=%s AND `mot_de_passe`=%s"
