@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-
+import mariadb
 class MainWindow:
     def __init__(self, master):
         self.master = master
