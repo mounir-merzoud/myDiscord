@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import tkinter.ttk as ttk
+import socket 
 import mariadb
 
 class MainWindow:
@@ -72,11 +73,11 @@ class MainWindow:
     def connect_to_database(self):
         try:
             conn = mariadb.connect(
-                user="votre_utilisateur",
-                password="votre_mot_de_passe",
-                host="votre_host",
+                user='mounir-merzoudy',
+                password='Mounir-1992',
+                host='82.165.185.52',
                 port=3306,
-                database="votre_base_de_donnees"
+                database='mounir-merzoud_myDiscord'
             )
             return conn
         except mariadb.Error as e:
