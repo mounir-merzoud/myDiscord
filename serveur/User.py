@@ -8,6 +8,7 @@ from ttkthemes import ThemedStyle
 from PIL import Image, ImageTk
 from client import Client
 from MotDePass import forget_pass
+from database import connect_to_database
 
 # Définissez votre classe Client ici
 
@@ -25,17 +26,10 @@ def login_user():
         messagebox.showerror('Error', 'Veuillez remplir tous les champs')
     else:
         try: 
-            con = mariadb.connect(user='mounir-merzoudy',
-                                  password='Mounir-1992',
-                                  host='82.165.185.52',
-                                  port=3306,
-                                  database='mounir-merzoud_myDiscord')
-            mycursor = con.cursor()
-        except mariadb.Error as e:
-            messagebox.showerror('Error', 'La connexion n\'est pas établie, veuillez réessayer')
-            return
-
-        try:
+            con = connect_to_database()
+            if con:
+                mycursor = con.cursor()
+                
             query = 'SELECT * FROM user WHERE username=%s AND mot_de_passe=%s'
             mycursor.execute(query, (usernameEntry.get(), passwordEntry.get()))
             row = mycursor.fetchone()

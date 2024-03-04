@@ -3,6 +3,8 @@ from PIL import ImageTk
 from tkinter import messagebox
 import mariadb
 
+from database import connect_to_database
+
 
 class UserUp:
     def __init__(self):
@@ -74,12 +76,10 @@ class UserUp:
             messagebox.showerror('Error', 'Veuillez accepter les termes et conditions')    
         else:    
             try:
-                con = mariadb.connect(user='mounir-merzoudy',
-                                        password='Mounir-1992',
-                                        host='82.165.185.52',
-                                        port=3306,
-                                        database='mounir-merzoud_myDiscord')
-                mycursor = con.cursor()
+                con = connect_to_database()
+                if con:
+                    mycursor = con.cursor()
+       
             except mariadb.Error as e:
                 messagebox.showerror('Error', 'Database connectivity Issue, Please Try Again')
                 return
