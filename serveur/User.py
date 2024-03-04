@@ -1,4 +1,3 @@
-
 from tkinter import *
 from tkinter import messagebox
 import mariadb
@@ -14,14 +13,46 @@ from MotDePass import forget_pass
 
 def open_chat_window():
     global chat_client
-    HOST = "10.10.101.10"
+    HOST = "10.10.102.103"
     PORT = 9090
     username = usernameEntry.get()  # Récupérer le nom d'utilisateur
     password = passwordEntry.get()  # Récupérer le mot de passe
     chat_client = Client(HOST, PORT, username, password)  # Passer le nom d'utilisateur et le mot de passe à Client
     login_window.destroy()
 
+def login_user():
+    if usernameEntry.get() == '' or passwordEntry.get() == '':
+        messagebox.showerror('Error', 'Veuillez remplir tous les champs')
+    else:
+        try: 
+            con = mariadb.connect(user='mounir-merzoudy',
+                                  password='Mounir-1992',
+                                  host='82.165.185.52',
+                                  port=3306,
+                                  database='mounir-merzoud_myDiscord')
+            mycursor = con.cursor()
+        except mariadb.Error as e:
+            messagebox.showerror('Error', 'La connexion n\'est pas établie, veuillez réessayer')
+            return
 
+        try:
+            query = 'SELECT * FROM user WHERE username=%s AND mot_de_passe=%s'
+            mycursor.execute(query, (usernameEntry.get(), passwordEntry.get()))
+            row = mycursor.fetchone()
+            if row:
+                print("Authentification réussie.")
+                messagebox.showinfo('Succès', 'La connexion est établie')
+                open_chat_window() 
+            else:
+                print("Erreur d'authentification.")
+                messagebox.showerror('Error' , 'Nom d\'utilisateur ou mot de passe invalide')
+        except mariadb.Error as e:
+            messagebox.showerror('Error', 'Une erreur s\'est produite lors de l\'authentification')
+        finally:
+            con.close() 
+
+
+"""
 def login_user():
     if usernameEntry.get() == '' or passwordEntry.get() == '':
         messagebox.showerror('Error', 'Veuillez remplir tous les champs')
@@ -46,7 +77,7 @@ def login_user():
                     messagebox.showerror('Error' , 'Nom d\'utilisateur ou mot de passe invalide')
     finally:
         con.close() 
-
+"""
 def signup_page():
     login_window.destroy()
     user_up = UserUp()
@@ -125,6 +156,11 @@ newaccountButton=Button(login_window,text='Create New', font=('Comic Sans MS', 9
 newaccountButton.place(x=727, y=500)
 
 login_window.mainloop()
+
+
+
+
+
 
 
 
