@@ -48,3 +48,4 @@ text.place(x=600, y=200)
 
 
 window.mainloop()
+
