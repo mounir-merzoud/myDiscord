@@ -4,8 +4,6 @@ from PIL import ImageTk
 from tkinter import Toplevel
 import mariadb
 
-from database import connect_to_database
-
 """
 def forget_pass():
     def change_password():
@@ -48,10 +46,12 @@ def forget_pass():
             messagebox.showerror('Error', 'Password and confirm password are not matching', parent=window)
         else:
             try:
-                con = connect_to_database()
-                if con:
-                    mycursor = con.cursor()
-
+                con=mariadb.connect(user='mounir-merzoudy',
+                                        password='Mounir-1992',
+                                        host='82.165.185.52',
+                                        port=3306,
+                                        database='mounir-merzoud_myDiscord')
+                mycursor = con.cursor()
             except mariadb.Error as error:
                 messagebox.showerror('Error', str(error), parent=window) 
                 return    

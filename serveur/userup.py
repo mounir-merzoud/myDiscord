@@ -3,8 +3,6 @@ from PIL import ImageTk
 from tkinter import messagebox
 import mariadb
 
-from database import connect_to_database
-
 
 class UserUp:
     def __init__(self):
@@ -70,16 +68,16 @@ class UserUp:
     def connect_database(self):
         if self.email_entry.get() == '':
             messagebox.showerror('Error', 'Tous les champs sont requis')
-        elif self.MotDePasseEntry.get() != self.ConfirmerEntry.get():
-            messagebox.showerror('Error', 'Non concordance des mots de passe')
         elif self.check.get() == 0:
             messagebox.showerror('Error', 'Veuillez accepter les termes et conditions')    
         else:    
             try:
-                con = connect_to_database()
-                if con:
-                    mycursor = con.cursor()
-       
+                con = mariadb.connect(user='mounir-merzoudy',
+                                        password='Mounir-1992',
+                                        host='82.165.185.52',
+                                        port=3306,
+                                        database='mounir-merzoud_myDiscord')
+                mycursor = con.cursor()
             except mariadb.Error as e:
                 messagebox.showerror('Error', 'Database connectivity Issue, Please Try Again')
                 return

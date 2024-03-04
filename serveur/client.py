@@ -6,9 +6,7 @@ from tkinter import PhotoImage
 from ttkthemes import ThemedStyle 
 from PIL import Image, ImageTk
 import pymysql.cursors  
-import mariadb
-
-from serveur.database import connect_to_database  
+import mariadb  
 
 HOST = "10.10.101.10"
 PORT = 9090
@@ -30,13 +28,16 @@ class Client:
         self.authenticate()
 
 
-    def authenticate(self): 
-        con = connect_to_database()
-        if con:
-            mycursor = con.cursor()
+    def authenticate(self):
         
+        connection = mariadb.connect(user='mounir-merzoudy',
+                                     password='Mounir-1992',
+                                     host='82.165.185.52',
+                                     port=3306,
+                                     database='mounir-merzoud_myDiscord')
+
         try:
-            with con.cursor() as cursor:
+            with connection.cursor() as cursor:
                 sql = "SELECT * FROM `user` WHERE `username`=%s AND `mot_de_passe`=%s"
                 cursor.execute(sql, (self.username, self.password))
                 user = cursor.fetchone()
@@ -47,7 +48,7 @@ class Client:
                 else:
                     print("Erreur d'authentification.")
         finally:
-            con.close()
+            connection.close()
 # Méthode pour commencer le chat
     def start_chat(self):
         self.gui_done = False  

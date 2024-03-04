@@ -8,7 +8,6 @@ from ttkthemes import ThemedStyle
 from PIL import Image, ImageTk
 from client import Client
 from MotDePass import forget_pass
-from database import connect_to_database
 
 # Définissez votre classe Client ici
 
@@ -21,32 +20,7 @@ def open_chat_window():
     chat_client = Client(HOST, PORT, username, password)  # Passer le nom d'utilisateur et le mot de passe à Client
     login_window.destroy()
 
-def login_user():
-    if usernameEntry.get() == '' or passwordEntry.get() == '':
-        messagebox.showerror('Error', 'Veuillez remplir tous les champs')
-    else:
-        try: 
-            con = connect_to_database()
-            if con:
-                mycursor = con.cursor()
-                
-            query = 'SELECT * FROM user WHERE username=%s AND mot_de_passe=%s'
-            mycursor.execute(query, (usernameEntry.get(), passwordEntry.get()))
-            row = mycursor.fetchone()
-            if row:
-                print("Authentification réussie.")
-                messagebox.showinfo('Succès', 'La connexion est établie')
-                open_chat_window() 
-            else:
-                print("Erreur d'authentification.")
-                messagebox.showerror('Error' , 'Nom d\'utilisateur ou mot de passe invalide')
-        except mariadb.Error as e:
-            messagebox.showerror('Error', 'Une erreur s\'est produite lors de l\'authentification')
-        finally:
-            con.close() 
 
-
-"""
 def login_user():
     if usernameEntry.get() == '' or passwordEntry.get() == '':
         messagebox.showerror('Error', 'Veuillez remplir tous les champs')
@@ -71,7 +45,7 @@ def login_user():
                     messagebox.showerror('Error' , 'Nom d\'utilisateur ou mot de passe invalide')
     finally:
         con.close() 
-"""
+
 def signup_page():
     login_window.destroy()
     user_up = UserUp()
