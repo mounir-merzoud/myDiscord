@@ -2,7 +2,7 @@
 import socket
 import threading
 
-HOST ="10.10.101.10"
+HOST ="10.10.102.242"
 
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -2,10 +2,7 @@ import socket
 import threading  
 import tkinter.scrolledtext  
 from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
-from tkinter import PhotoImage
 from ttkthemes import ThemedStyle 
-from PIL import Image, ImageTk
-import pymysql.cursors  
 import mariadb  
 
 HOST = "10.10.101.10"
@@ -23,7 +20,7 @@ class Client:
         self.sock.connect((host, port))
         self.msg = Tk()
         self.msg.withdraw()
-        self.username = username  # Stocker le nom d'utilisateur dans un attribut de classe
+        self.username = username 
         self.password = password 
         self.authenticate()
 

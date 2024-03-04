@@ -5,203 +5,180 @@ import pyaudio
 import wave
 import socket
 
-# Configuration du socket client
-SERVER_ADDRESS = '82.165.185.52'  # Adresse IP du serveur
-SERVER_PORT = 3306  # Port sur lequel le serveur écoute
+class ChatApplication:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Message")
+        self.master.configure(bg='LightSalmon')
 
-# Création du socket client
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.SERVER_ADDRESS = '82.165.185.52'
+        self.SERVER_PORT = 3306
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.memo_audio_path = None
 
-# Chemin du mémo vocal
-memo_audio_path = None
+        with open('imoji.json', 'r', encoding='utf-8') as file:
+            self.emojis_data = json.load(file)
+        self.emojis = self.emojis_data['emojis']
 
-# Charger les emojis à partir du fichier JSON en spécifiant l'encodage
-with open('imoji.json', 'r', encoding='utf-8') as file:
-    emojis_data = json.load(file)
+        # Définissez une variable booléenne pour suivre si le thème a été créé
+        self.theme_created = False
 
-emojis = emojis_data['emojis']
+        self.setup_ui()
 
-memo_audio_path = None  # Ajoutez cette ligne avant la fonction send_message() pour initialiser la variable
+    def setup_ui(self):
+        if not self.theme_created:
+            # Créez le thème uniquement s'il n'existe pas déjà
+            self.style = ttk.Style()
+            self.style.theme_create("custom", parent="clam", settings={
+                "TButton": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
+                "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "salmon3"}},
+                "TFrame": {"configure": {"background": "LightSalmon"}},
+                "TText": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
+            })
+            self.style.theme_use("custom")
 
-def send_message():
-    global memo_audio_path 
-    message = message_input.get("1.0", "end").strip()
-    if message:
-        # Insérer le message dans la zone de texte
-        message_list.config(state=tk.NORMAL)
-        message_list.insert(tk.END, f"You: {message}\n", "sent_message")
-        
-        # S'il y a un mémo vocal enregistré, l'ajouter à la zone de texte
-        if memo_audio_path:
-            message_list.insert(tk.END, f"Memo vocal: {memo_audio_path}\n", "sent_message")
-        
-        message_list.config(state=tk.DISABLED)
-        
-        # Envoyer le message et le mémo vocal au serveur
-        send_data_to_server(message, memo_audio_path)
-        
-        # Réinitialiser la variable memo_audio_path correctement
-        memo_audio_path = None  
-        
-        # Effacer le contenu de la zone de saisie
-        message_input.delete("1.0", tk.END)
+            # Mettez à jour la variable booléenne pour indiquer que le thème a été créé
+            self.theme_created = True
 
+        message_frame = ttk.Frame(self.master)
+        message_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-# Fonction pour insérer un emoji dans la zone de saisie de message
-def insert_emoji(emoji):
-    message_input.insert(tk.END, emoji)
+        self.message_list = tk.Text(message_frame, bg='salmon3', fg='white', font=('Helvetica', 12), state=tk.DISABLED)
+        self.message_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-# Fonction pour enregistrer un mémo vocal
-def record_audio():
-    global memo_audio_path
-    
-    CHUNK = 1024
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 1
-    RATE = 44100
-    RECORD_SECONDS = 5
-    WAVE_OUTPUT_FILENAME = "memo.wav"
+        scrollbar = ttk.Scrollbar(message_frame, command=self.message_list.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.message_list.config(yscrollcommand=scrollbar.set)
 
-    p = pyaudio.PyAudio()
+        input_frame = ttk.Frame(self.master)
+        input_frame.pack(padx=10, pady=10, fill=tk.BOTH)
 
-    stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    input=True,
-                    frames_per_buffer=CHUNK)
+        self.message_input = tk.Text(input_frame, height=3, bg='salmon3', fg='white', font=('Helvetica', 12))
+        self.message_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    print("* Enregistrement audio...")
+        send_button = ttk.Button(input_frame, text="🚀", command=self.send_message)
+        send_button.pack(side=tk.LEFT, padx=5)
 
-    frames = []
+        record_button = ttk.Button(input_frame, text="🎤", command=self.record_audio)
+        record_button.pack(side=tk.LEFT, padx=5)
 
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
+        photo_button = ttk.Button(input_frame, text="📷", command=self.send_photo)
+        photo_button.pack(side=tk.LEFT, padx=5)
 
-    print("* Enregistrement terminé.")
+        video_button = ttk.Button(input_frame, text="🎥", command=self.send_video)
+        video_button.pack(side=tk.LEFT, padx=5)
 
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
+        emoji_button = ttk.Button(input_frame, text="😎", command=self.show_emojis)
+        emoji_button.pack(side=tk.LEFT, padx=5)
 
-    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-    wf.setnchannels(CHANNELS)
-    wf.setsampwidth(p.get_sample_size(FORMAT))
-    wf.setframerate(RATE)
-    wf.writeframes(b''.join(frames))
-    wf.close()
-    
-    # Mettre à jour le chemin du mémo vocal
-    memo_audio_path = WAVE_OUTPUT_FILENAME
+    def send_message(self):
+        message = self.message_input.get("1.0", "end").strip()
+        if message:
+            self.message_list.config(state=tk.NORMAL)
+            self.message_list.insert(tk.END, f"You: {message}\n", "sent_message")
 
-# Fonction pour envoyer les données (message et mémo vocal) au serveur
-def send_data_to_server(message, audio_path):
-    try:
-        client_socket.connect((SERVER_ADDRESS, SERVER_PORT))
-        
-        # Envoyer le message
-        client_socket.sendall(message.encode())
-        
-        # Si un mémo vocal est enregistré, l'envoyer
-        if audio_path:
-            with open(audio_path, "rb") as audio_file:
-                audio_data = audio_file.read()
-                client_socket.sendall(audio_data)
-                print("Le mémo vocal a été envoyé avec succès.")
-    except Exception as e:
-        print(f"Erreur lors de l'envoi des données au serveur : {e}")
+            if self.memo_audio_path:
+                self.message_list.insert(tk.END, f"Memo vocal: {self.memo_audio_path}\n", "sent_message")
 
-# Fonction pour envoyer une photo
-def send_photo():
-    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png")])
-    if file_path:
-        send_generic_file(file_path)
+            self.message_list.config(state=tk.DISABLED)
 
-# Fonction pour envoyer un fichier
-def send_generic_file(file_path):
-    try:
-        client_socket.connect((SERVER_ADDRESS, SERVER_PORT))
-        with open(file_path, "rb") as file:
-            file_data = file.read()
-            client_socket.sendall(file_data)
-        print(f"Le fichier {file_path} a été envoyé avec succès.")
-    except Exception as e:
-        print(f"Erreur lors de l'envoi du fichier au serveur : {e}")
+            self.send_data_to_server(message, self.memo_audio_path)
 
-# Fonction pour envoyer une vidéo
-def send_video():
-    file_path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4;*.avi;*.mkv")])
-    if file_path:
-        send_generic_file(file_path)
+            self.memo_audio_path = None
+            self.message_input.delete("1.0", tk.END)
 
-# Création de la fenêtre principale
-root = tk.Tk()
-root.title("Message")
+    def record_audio(self):
+        CHUNK = 1024
+        FORMAT = pyaudio.paInt16
+        CHANNELS = 1
+        RATE = 44100
+        RECORD_SECONDS = 5
+        WAVE_OUTPUT_FILENAME = "memo.wav"
 
-# Définir le style de la fenêtre et des widgets
-root.configure(bg='LightSalmon')  
+        p = pyaudio.PyAudio()
 
-# Définir les styles personnalisés
-root.style = ttk.Style()
-root.style.theme_create("custom", parent="clam", settings={
-    "TButton": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
-    "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "salmon3"}},
-    "TFrame": {"configure": {"background": "LightSalmon"}},
-    "TText": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
-})
-root.style.theme_use("custom")
+        stream = p.open(format=FORMAT,
+                        channels=CHANNELS,
+                        rate=RATE,
+                        input=True,
+                        frames_per_buffer=CHUNK)
 
-# Cadre pour la zone de message
-message_frame = ttk.Frame(root)
-message_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+        print("* Enregistrement audio...")
 
-# Zone de texte pour les messages
-message_list = tk.Text(message_frame, bg='salmon3', fg='white', font=('Helvetica', 12), state=tk.DISABLED)
-message_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        frames = []
 
-# Barre de défilement pour la zone de texte
-scrollbar = ttk.Scrollbar(message_frame, command=message_list.yview)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-message_list.config(yscrollcommand=scrollbar.set)
+        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+            data = stream.read(CHUNK)
+            frames.append(data)
 
-# Cadre pour la saisie de message
-input_frame = ttk.Frame(root)
-input_frame.pack(padx=10, pady=10, fill=tk.BOTH)
+        print("* Enregistrement terminé.")
 
-# Zone de texte pour la saisie de message
-message_input = tk.Text(input_frame, height=3, bg='salmon3', fg='white', font=('Helvetica', 12))
-message_input.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
 
-# Bouton pour envoyer le message
-send_button = ttk.Button(input_frame, text="🚀", command=send_message)
-send_button.pack(side=tk.LEFT, padx=5)
+        wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+        wf.setnchannels(CHANNELS)
+        wf.setsampwidth(p.get_sample_size(FORMAT))
+        wf.setframerate(RATE)
+        wf.writeframes(b''.join(frames))
+        wf.close()
 
-# Bouton pour enregistrer un mémo vocal
-record_button = ttk.Button(input_frame, text="🎤", command=record_audio)
-record_button.pack(side=tk.LEFT, padx=5)
+        self.memo_audio_path = WAVE_OUTPUT_FILENAME
 
-# Bouton pour envoyer une photo
-photo_button = ttk.Button(input_frame, text="📷", command=send_photo)
-photo_button.pack(side=tk.LEFT, padx=5)
+    def send_data_to_server(self, message, audio_path):
+        try:
+            self.client_socket.connect((self.SERVER_ADDRESS, self.SERVER_PORT))
+            self.client_socket.sendall(message.encode())
 
-# Bouton pour envoyer une vidéo
-video_button = ttk.Button(input_frame, text="🎥", command=send_video)
-video_button.pack(side=tk.LEFT, padx=5)
+            if audio_path:
+                with open(audio_path, "rb") as audio_file:
+                    audio_data = audio_file.read()
+                    self.client_socket.sendall(audio_data)
+                    print("Le mémo vocal a été envoyé avec succès.")
+        except Exception as e:
+            print(f"Erreur lors de l'envoi des données au serveur : {e}")
 
-# Bouton pour afficher la liste d'emojis
-def show_emojis():
-    emojis_window = tk.Toplevel(root)
-    emojis_window.title("😎 ")
-    emojis_window.configure(bg='salmon3')
+    def send_photo(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png")])
+        if file_path:
+            self.send_generic_file(file_path)
 
-    emojis_frame = ttk.Frame(emojis_window)
-    emojis_frame.pack(padx=10, pady=10)
+    def send_generic_file(self, file_path):
+        try:
+            self.client_socket.connect((self.SERVER_ADDRESS, self.SERVER_PORT))
+            with open(file_path, "rb") as file:
+                file_data = file.read()
+                self.client_socket.sendall(file_data)
+            print(f"Le fichier {file_path} a été envoyé avec succès.")
+        except Exception as e:
+            print(f"Erreur lors de l'envoi du fichier au serveur : {e}")
 
-    for emoji in emojis:  # Utiliser la liste des emojis chargés à partir du fichier JSON
-        emoji_button = ttk.Button(emojis_frame, text=emoji, command=lambda e=emoji: insert_emoji(e))
-        emoji_button.pack(side=tk.LEFT, padx=5, pady=5)
+    def send_video(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4;*.avi;*.mkv")])
+        if file_path:
+            self.send_generic_file(file_path)
 
-emoji_button = ttk.Button(input_frame, text="😎 ", command=show_emojis)
-emoji_button.pack(side=tk.LEFT, padx=5)
+    def show_emojis(self):
+        emojis_window = tk.Toplevel(self.master)
+        emojis_window.title("😎")
+        emojis_window.configure(bg='salmon3')
 
-root.mainloop()
+        emojis_frame = ttk.Frame(emojis_window)
+        emojis_frame.pack(padx=10, pady=10)
+
+        for emoji in self.emojis:
+            emoji_button = ttk.Button(emojis_frame, text=emoji, command=lambda e=emoji: self.insert_emoji(e))
+            emoji_button.pack(side=tk.LEFT, padx=5, pady=5)
+
+    def insert_emoji(self, emoji):
+        self.message_input.insert(tk.END, emoji)
+
+def main():
+    root = tk.Tk()
+    app = ChatApplication(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
+

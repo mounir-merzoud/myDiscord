@@ -1,5 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import mysql.connector
+from message import ChatApplication
 
 class MainWindow:
     def __init__(self, master):
@@ -8,6 +10,13 @@ class MainWindow:
         self.master.geometry("990x660+50+50")
         self.master.configure(bg="salmon")
 
+        # Connexion à la base de données
+        self.connection = mysql.connector.connect(user='mounir-merzoudy',
+                                                  password='Mounir-1992',
+                                                  host='82.165.185.52',
+                                                  port=3306,
+                                                  database='mounir-merzoud_myDiscord')
+        
         # Barre de menu
         self.menu_bar = tk.Menu(self.master)
 
@@ -42,16 +51,15 @@ class MainWindow:
 
         self.friends_listbox = tk.Listbox(self.main_frame, bg="salmon")
         self.friends_listbox.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
+        
+        # Lier la fonction à l'événement de clic sur un ami dans la liste
+        self.friends_listbox.bind("<Double-1>", self.open_chat_window)
+
+        # Remplir la liste d'amis depuis la base de données
+        self.populate_friends_list()
 
         # Liste des canaux au centre
         self.channels_treeview = ttk.Treeview(self.main_frame)
-        self.channels_treeview["columns"] = ("Channel", "Users")
-        self.channels_treeview.column("#0", width=120, minwidth=120)
-        self.channels_treeview.column("Channel", anchor=tk.W, width=200)
-        self.channels_treeview.column("Users", anchor=tk.W, width=200)
-        self.channels_treeview.heading("#0", text="ID", anchor=tk.W)
-        self.channels_treeview.heading("Channel", text="Channel", anchor=tk.W)
-        self.channels_treeview.heading("Users", text="Users", anchor=tk.W)
         self.channels_treeview.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky="nsew")
 
         # Redimensionnement automatique des cellules du cadre principal
@@ -60,12 +68,45 @@ class MainWindow:
         self.main_frame.columnconfigure(2, weight=1)
         self.main_frame.rowconfigure(1, weight=1)
 
+        # Propriété pour stocker la fenêtre de chat actuelle
+        self.chat_window = None
+
     def add_channel(self, name, emoji):
         self.channels_listbox.insert(tk.END, f"{emoji} {name}")
 
+    def populate_friends_list(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT username FROM user")  
+        users = cursor.fetchall()
+        for user in users:
+            self.friends_listbox.insert(tk.END, user[0])
+        cursor.close()
+        
+    def open_chat_window(self, event):
+        # Vérifiez d'abord si une fenêtre de chat est déjà ouverte
+        if self.chat_window is not None:
+            self.chat_window.destroy()
+
+        # Obtenir l'ami sélectionné dans la liste
+        selected_friend = self.friends_listbox.get(self.friends_listbox.curselection())
+
+        # Créez une nouvelle fenêtre de chat
+        self.chat_window = tk.Toplevel(self.master)
+        self.chat_window.title(f"Chat avec {selected_friend}")
+        
+        # Instanciez la classe ChatApplication avec la nouvelle fenêtre
+        app = ChatApplication(self.chat_window)
+
+    def __del__(self):
+        if self.connection.is_connected():
+            self.connection.close()
+        if self.chat_window is not None:
+            self.chat_window.destroy()
+        self.master.destroy()
+
 def main():
     root = tk.Tk()
-    app = MainWindow(root)
+    MainWindow(root)
     root.mainloop()
 
 if __name__ == "__main__":
