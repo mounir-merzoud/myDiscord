@@ -1,12 +1,21 @@
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.ttk as ttk
 import mariadb
+
 class MainWindow:
     def __init__(self, master):
         self.master = master
         self.master.title("MyChat")
         self.master.geometry("990x660+50+50")
         self.master.configure(bg="salmon")
+        try:
+            self.con = self.connect_to_database()
+            if self.con:
+                self.mycursor = self.con.cursor()
+        except mariadb.Error as e:
+            messagebox.showerror('Error', 'Database connectivity Issue, Please Try Again')
+            return
 
         # Barre de menu
         self.menu_bar = tk.Menu(self.master)
@@ -60,6 +69,20 @@ class MainWindow:
         self.main_frame.columnconfigure(2, weight=1)
         self.main_frame.rowconfigure(1, weight=1)
 
+    def connect_to_database(self):
+        try:
+            conn = mariadb.connect(
+                user="votre_utilisateur",
+                password="votre_mot_de_passe",
+                host="votre_host",
+                port=3306,
+                database="votre_base_de_donnees"
+            )
+            return conn
+        except mariadb.Error as e:
+            messagebox.showerror('Error', f'Database connectivity Issue: {e}')
+            return None
+
     def add_channel(self, name, emoji):
         self.channels_listbox.insert(tk.END, f"{emoji} {name}")
 
@@ -70,4 +93,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
