@@ -1,95 +1,129 @@
 import tkinter as tk
-from tkinter import messagebox
-import tkinter.ttk as ttk
-import socket 
 import mariadb
 
 class MainWindow:
     def __init__(self, master):
         self.master = master
         self.master.title("MyChat")
-        self.master.geometry("990x660+50+50")
         self.master.configure(bg="salmon")
-        try:
-            self.con = self.connect_to_database()
-            if self.con:
-                self.mycursor = self.con.cursor()
-        except mariadb.Error as e:
-            messagebox.showerror('Error', 'Database connectivity Issue, Please Try Again')
-            return
 
-        # Barre de menu
-        self.menu_bar = tk.Menu(self.master)
+        # Dimensions spécifiques pour chaque cadre
+        self.channel_frame_width = 300
+        self.messages_frame_width = 400
+        self.users_frame_width = 300
 
-        self.settings_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.settings_menu.add_command(label="Paramètres")
-        self.settings_menu.add_command(label="Changer de compte")
-        self.settings_menu.add_separator()
-        self.settings_menu.add_command(label="Déconnexion")
-        self.menu_bar.add_cascade(label="Options", menu=self.settings_menu)
-
-        self.master.config(menu=self.menu_bar)
+        # Connexion à la base de données
+        self.connection = mariadb.connect(user='mounir-merzoudy',
+                                          password='Mounir-1992',
+                                          host='82.165.185.52',
+                                          port=3306,
+                                          database='mounir-merzoud_myDiscord')
 
         # Cadre principal
         self.main_frame = tk.Frame(self.master, bg="salmon")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
 
         # Liste des salons à gauche
-        self.channels_label = tk.Label(self.main_frame, text="Salons", bg="salmon")
-        self.channels_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        self.channel_frame = tk.Frame(self.main_frame, bg="salmon", width=self.channel_frame_width)
+        self.channel_frame.pack(side=tk.LEFT, fill=tk.Y)
+        
+        self.channels_label = tk.Label(self.channel_frame, text="Salons", bg="salmon")
+        self.channels_label.pack()
 
-        self.channels_listbox = tk.Listbox(self.main_frame, bg="salmon", selectmode=tk.SINGLE)
-        self.channels_listbox.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+        self.channels_listbox = tk.Listbox(self.channel_frame, bg="salmon", selectmode=tk.SINGLE)
+        self.channels_listbox.pack(fill=tk.BOTH, expand=True)
 
-        # Ajouter des salons avec des emojis
-        self.add_channel("Sport", "⚽")
-        self.add_channel("Cuisine", "🍳")
-        self.add_channel("Actualités", "📰")
+        # Charger la liste des salons depuis la base de données
+        self.load_channels()
 
-        # Liste d'amis à droite
-        self.friends_label = tk.Label(self.main_frame, text="Amis", bg="salmon")
-        self.friends_label.grid(row=0, column=2, padx=5, pady=5, sticky="e")
+        self.selected_channel = None  # Pour stocker le salon sélectionné
 
-        self.friends_listbox = tk.Listbox(self.main_frame, bg="salmon")
-        self.friends_listbox.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
+        # Cadre pour afficher les messages
+        self.messages_frame = tk.Frame(self.main_frame, bg="white", width=self.messages_frame_width)
+        self.messages_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Liste des canaux au centre
-        self.channels_treeview = ttk.Treeview(self.main_frame)
-        self.channels_treeview["columns"] = ("Channel", "Users")
-        self.channels_treeview.column("#0", width=120, minwidth=120)
-        self.channels_treeview.column("Channel", anchor=tk.W, width=200)
-        self.channels_treeview.column("Users", anchor=tk.W, width=200)
-        self.channels_treeview.heading("#0", text="ID", anchor=tk.W)
-        self.channels_treeview.heading("Channel", text="Channel", anchor=tk.W)
-        self.channels_treeview.heading("Users", text="Users", anchor=tk.W)
-        self.channels_treeview.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky="nsew")
+        # Cadre pour afficher la liste des utilisateurs
+        self.users_frame = tk.Frame(self.main_frame, bg="lightblue", width=self.users_frame_width)
+        self.users_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        # Redimensionnement automatique des cellules du cadre principal
-        self.main_frame.columnconfigure(0, weight=1)
-        self.main_frame.columnconfigure(1, weight=1)
-        self.main_frame.columnconfigure(2, weight=1)
-        self.main_frame.rowconfigure(1, weight=1)
+        # Zone de saisie des messages
+        self.entry_frame = tk.Frame(self.main_frame, bg="salmon")
+        self.entry_frame.pack(fill=tk.X)
 
-    def connect_to_database(self):
-        try:
-            conn = mariadb.connect(
-                user='mounir-merzoudy',
-                password='Mounir-1992',
-                host='82.165.185.52',
-                port=3306,
-                database='mounir-merzoud_myDiscord'
-            )
-            return conn
-        except mariadb.Error as e:
-            messagebox.showerror('Error', f'Database connectivity Issue: {e}')
-            return None
+        self.message_entry = tk.Entry(self.entry_frame, bg="white")
+        self.message_entry.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    def add_channel(self, name, emoji):
-        self.channels_listbox.insert(tk.END, f"{emoji} {name}")
+        send_button = tk.Button(self.entry_frame, text="Envoyer", bg="lightblue", command=self.send_message)
+        send_button.pack(side=tk.RIGHT)
+
+        # Lier la sélection d'un canal à la fonction de mise à jour des messages
+        self.channels_listbox.bind("<<ListboxSelect>>", self.update_messages)
+
+        # Charger la liste des utilisateurs
+        self.load_users()
+
+    def load_channels(self):
+        # Charger les salons depuis la base de données
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT nom FROM salon")
+        salons = cursor.fetchall()
+        for salon in salons:
+            self.channels_listbox.insert(tk.END, salon[0])
+        cursor.close()
+
+    def send_message(self):
+        if self.selected_channel is not None:
+            message = self.message_entry.get()
+
+            # Afficher le message dans le cadre des messages
+            message_label = tk.Label(self.messages_frame, text=message, bg="white")
+            message_label.pack(anchor="w")
+
+            # Enregistrer le message dans le fichier correspondant au salon
+            with open(f"{self.selected_channel}.txt", "a") as file:
+                file.write(message + "\n")
+
+            # Effacer la zone de saisie
+            self.message_entry.delete(0, tk.END)
+
+    def update_messages(self, event):
+        selected_index = self.channels_listbox.curselection()
+        if selected_index:
+            self.selected_channel = self.channels_listbox.get(selected_index)
+            self.messages_frame.destroy()
+            self.messages_frame = tk.Frame(self.main_frame, bg="white", width=self.messages_frame_width)
+            self.messages_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+            self.load_messages()
+
+    def load_messages(self):
+        # Charger les messages depuis le fichier correspondant au salon sélectionné
+        if self.selected_channel:
+            try:
+                with open(f"{self.selected_channel}.txt", "r") as file:
+                    for line in file:
+                        message_label = tk.Label(self.messages_frame, text=line.strip(), bg="white")
+                        message_label.pack(anchor="w")
+            except FileNotFoundError:
+                pass
+
+    def load_users(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT username FROM user")
+        users = cursor.fetchall()
+        for user in users:
+            # Créer une étiquette cliquable pour chaque utilisateur
+            user_label = tk.Label(self.users_frame, text=user[0], bg="lightblue", cursor="hand2")
+            user_label.bind("<Button-1>", lambda event, user=user[0]: self.start_private_chat(user))
+            user_label.pack(anchor="w")
+        cursor.close()
+
+    def start_private_chat(self, user):
+        # Code pour démarrer une discussion privée avec l'utilisateur sélectionné
+        print(f"Démarrer une discussion privée avec {user}")
 
 def main():
     root = tk.Tk()
-    app = MainWindow(root)
+    MainWindow(root)
     root.mainloop()
 
 if __name__ == "__main__":

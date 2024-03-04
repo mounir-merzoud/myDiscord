@@ -1,20 +1,12 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import socket  
 import threading  
 import tkinter.scrolledtext  
 from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
-from tkinter import PhotoImage
 from ttkthemes import ThemedStyle 
-from PIL import Image, ImageTk
-import pymysql.cursors  
 import mariadb  
 
 HOST = "192.168.166.61"
-=======
-
-=======
->>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd
 import socket  
 import threading  
 import tkinter.scrolledtext  
@@ -25,12 +17,7 @@ from PIL import Image, ImageTk
 import pymysql.cursors  
 import mariadb  
 
-<<<<<<< HEAD
 HOST = "10.10.95.62"
->>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
-=======
-HOST = "10.10.101.10"
->>>>>>> b83c61f9e51d92caa6dff6af3b226d07dc986fcd
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
@@ -45,7 +32,7 @@ class Client:
         self.sock.connect((host, port))
         self.msg = Tk()
         self.msg.withdraw()
-        self.username = username  # Stocker le nom d'utilisateur dans un attribut de classe
+        self.username = username 
         self.password = password 
         self.authenticate()
 
@@ -71,12 +58,7 @@ class Client:
                     print("Erreur d'authentification.")
         finally:
             connection.close()
-<<<<<<< HEAD
 
-    # Méthode pour commencer le chat
-=======
-# Méthode pour commencer le chat
->>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
     def start_chat(self):
         self.gui_done = False  
         self.running = True  
@@ -108,12 +90,10 @@ class Client:
         self.logout_button = Button(self.left_frame, text="Déconnexion", command=self.logout, bg="red")
         self.logout_button.pack(fill="x", pady=5)
 
-<<<<<<< HEAD
         # Charger l'image dans le thread principal
         self.load_background_image()
-=======
-        
->>>>>>> ec0d50c7d63adb059134186d12e29c226d5ecd26
+
+
 
         # Création du style thématisé
         style = ThemedStyle(self.win)

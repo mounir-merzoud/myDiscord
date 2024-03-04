@@ -14,7 +14,7 @@ from MotDePass import forget_pass
 
 def open_chat_window():
     global chat_client
-    HOST = "10.10.101.10"
+    HOST = "10.10.102.242"
     PORT = 9090
     username = usernameEntry.get()  # Récupérer le nom d'utilisateur
     password = passwordEntry.get()  # Récupérer le mot de passe
