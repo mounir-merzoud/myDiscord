@@ -1,7 +1,7 @@
 import socket  
 import threading  
 import tkinter.scrolledtext  
-from tkinter import Tk, Label, Text, Button, Toplevel, Frame
+from tkinter import Tk, Label, Text, Button, Frame
 from ttkthemes import ThemedStyle 
 import mariadb  
 from userup import UserUp
@@ -52,7 +52,6 @@ class Client:
         receive_thread.start()  
 
     # Méthode pour boucler l'interface utilisateur
-    # Méthode pour boucler l'interface utilisateur
     def gui_loop(self):
         self.win = Tk()
         self.win.geometry("600x400")  # Définir les dimensions de la fenêtre principale
@@ -62,15 +61,12 @@ class Client:
         self.left_frame = Frame(self.win, bg="#34495e", width=150)
         self.left_frame.pack(side="left", fill="y", padx=20, pady=20)
 
+        # Création du cadre à droite
         self.right_frame = Frame(self.win, bg="#34495e", width=150)
         self.right_frame.pack(side="right", fill="y", padx=20, pady=20)
 
-        # Appliquer le thème à droite
-        style_right = ThemedStyle(self.right_frame)
-        style_right.set_theme("equilux")
-
         # Boutons dans le cadre bleu
-        Button(self.left_frame, text="Utilisateurs", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Utilisateurs", bg="salmon", fg="white", width=15, command=self.show_users).pack(fill="x", pady=5)
         Button(self.left_frame, text="Option", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
         Button(self.left_frame, text="Informations", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
         Button(self.left_frame, text="Déconnexion", bg="salmon", fg="white", width=15, command=self.logout_user).pack(fill="x", pady=5)
@@ -78,7 +74,7 @@ class Client:
         # Création du style thématisé
         style = ThemedStyle(self.win)
         style.set_theme("equilux")  # Appliquer le thème equilux
-
+    
         # Label pour le salon
         Label(self.win, text="SALON", bg="#34495e", fg="white").pack(padx=20, pady=5)
 
@@ -106,8 +102,31 @@ class Client:
             self.text_area.yview("end")
             self.text_area.config(state="disabled")
 
-        self.win.mainloop()
+        self.win.mainloop()  
 
+    # Méthode pour afficher les utilisateurs
+    def show_users(self):
+        connection = mariadb.connect(user='mounir-merzoudy',
+                                     password='Mounir-1992',
+                                     host='82.165.185.52',
+                                     port=3306,
+                                     database='mounir-merzoud_myDiscord')
+
+        try:
+            with connection.cursor() as cursor:
+                sql = "SELECT username FROM `user`"
+                cursor.execute(sql)
+                users = cursor.fetchall()
+
+            user_frame = Frame(self.right_frame, bg="#34495e")
+            user_frame.pack(side="top", fill="both", expand=True)
+
+            for user in users:
+                user_label = Label(user_frame, text=user[0], bg="salmon", fg="white")
+                user_label.pack(padx=5, pady=2, fill="x")
+
+        finally:
+            connection.close()
 
     # Méthode pour envoyer un message
     def send_message(self):
@@ -123,6 +142,7 @@ class Client:
         self.sock.close()  
         exit(0)
 
+    # Méthode pour recevoir les messages
     def receive(self):
         while self.running:
             try:
@@ -142,10 +162,13 @@ class Client:
                 print("Erreur")  
                 self.sock.close()  
                 break  
+
+    # Méthode pour se déconnecter
     def logout_user(self):
         self.win.destroy()  
         self.sock.close()  
         UserUp()
+
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
