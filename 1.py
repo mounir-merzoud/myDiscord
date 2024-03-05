@@ -66,7 +66,7 @@ def load_profile():
                 database='mounir-merzoud_myDiscord')
             cursor = con.cursor()
 
-            sql = "SELECT * FROM user WHERE id = 1"
+            sql = "SELECT * FROM user WHERE id = 3"
             cursor.execute(sql)
             row = cursor.fetchone()
             if row is None:
