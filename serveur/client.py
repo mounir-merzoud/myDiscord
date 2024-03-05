@@ -5,7 +5,7 @@ from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
 from ttkthemes import ThemedStyle  
 import mariadb  
 
-HOST = "10.10.101.10"
+HOST = "10.10.104.142"
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier

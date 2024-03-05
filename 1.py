@@ -16,6 +16,8 @@ def toggle_bg():
     current_header = header.cget("bg")
     current_sidebar = sidebar.cget("bg")
     current_text = text.cget("bg")
+
+    
     current_text_fg = text.cget("fg")
 
     if current_bg == "#444654" and current_header == "#000000" \
@@ -124,6 +126,14 @@ def load_profiles():
             info_labels.clear()
 
             # Créer une nouvelle étiquette d'informations
+            username_label = Label(profiles_frame, text=f"Username : {profile[0]}", font="Arial 14", bg="#444654", fg="white")
+            username_label.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
+            info_labels.append(username_label)
+
+            firstname_label = Label(profiles_frame, text=f"Prename : {profile[1]}", font="Arial 14", bg="#444654", fg="white")
+            firstname_label.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
+            info_labels.append(firstname_label)
+
             email_label = Label(profiles_frame, text=f"Email : {profile[2]}", font="Arial 14", bg="#444654", fg="white")
             email_label.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
             info_labels.append(email_label)
