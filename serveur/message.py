@@ -23,22 +23,24 @@ class ChatApplication:
         # Définissez une variable booléenne pour suivre si le thème a été créé
         self.theme_created = False
 
-        self.setup_ui()
-
-    def setup_ui(self):
-        if not self.theme_created:
-            # Créez le thème uniquement s'il n'existe pas déjà
+        # Vérifiez si le thème existe déjà
+        if not ttk.Style().theme_names().__contains__("custom"):
+            self.setup_ui()
+        else:
             self.style = ttk.Style()
-            self.style.theme_create("custom", parent="clam", settings={
-                "TButton": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
-                "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "salmon3"}},
-                "TFrame": {"configure": {"background": "LightSalmon"}},
-                "TText": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
-            })
             self.style.theme_use("custom")
 
-            # Mettez à jour la variable booléenne pour indiquer que le thème a été créé
-            self.theme_created = True
+    def setup_ui(self):
+        # Créez le thème uniquement s'il n'existe pas déjà
+        self.style = ttk.Style()
+        self.style.theme_create("custom", parent="clam", settings={
+            "TButton": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
+            "TLabel": {"configure": {"foreground": "white", "font": ("Helvetica", 12), "background": "salmon3"}},
+            "TFrame": {"configure": {"background": "LightSalmon"}},
+            "TText": {"configure": {"background": "salmon3", "foreground": "white", "font": ("Helvetica", 12)}},
+        })
+
+        self.style.theme_use("custom")
 
         message_frame = ttk.Frame(self.master)
         message_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
@@ -70,6 +72,7 @@ class ChatApplication:
 
         emoji_button = ttk.Button(input_frame, text="😎", command=self.show_emojis)
         emoji_button.pack(side=tk.LEFT, padx=5)
+
 
     def send_message(self):
         message = self.message_input.get("1.0", "end").strip()

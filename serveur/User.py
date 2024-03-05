@@ -5,7 +5,6 @@ import mariadb
 from userup import UserUp
 from tkinter import  Tk, Label, Text, Button, Toplevel, Frame
 from tkinter import PhotoImage
-from ttkthemes import ThemedStyle
 from PIL import Image, ImageTk
 from client import Client
 from MotDePass import forget_pass
@@ -14,7 +13,7 @@ from MotDePass import forget_pass
 
 def open_chat_window():
     global chat_client
-    HOST = "10.10.102.242"
+    HOST ="10.10.104.142"
     PORT = 9090
     username = usernameEntry.get()  # Récupérer le nom d'utilisateur
     password = passwordEntry.get()  # Récupérer le mot de passe
