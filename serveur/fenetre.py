@@ -150,4 +150,8 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> d5357d38687c789f74d165eb53a1fe6b3161c798
