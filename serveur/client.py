@@ -52,6 +52,7 @@ class Client:
         receive_thread.start()  
 
     # Méthode pour boucler l'interface utilisateur
+    # Méthode pour boucler l'interface utilisateur
     def gui_loop(self):
         self.win = Tk()
         self.win.geometry("600x400")  # Définir les dimensions de la fenêtre principale
@@ -61,31 +62,38 @@ class Client:
         self.left_frame = Frame(self.win, bg="#34495e", width=150)
         self.left_frame.pack(side="left", fill="y", padx=20, pady=20)
 
+        self.right_frame = Frame(self.win, bg="#34495e", width=150)
+        self.right_frame.pack(side="right", fill="y", padx=20, pady=20)
+
+        # Appliquer le thème à droite
+        style_right = ThemedStyle(self.right_frame)
+        style_right.set_theme("equilux")
+
         # Boutons dans le cadre bleu
-        Button(self.left_frame, text="Utilisateurs", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
-        Button(self.left_frame, text="Option", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
-        Button(self.left_frame, text="Informations", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
-        Button(self.left_frame, text="Déconnexion", bg="#2ecc71", fg="white", width=15, command=self.logout_user).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Utilisateurs", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Option", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Informations", bg="salmon", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Déconnexion", bg="salmon", fg="white", width=15, command=self.logout_user).pack(fill="x", pady=5)
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
         style.set_theme("equilux")  # Appliquer le thème equilux
-    
+
         # Label pour le salon
         Label(self.win, text="SALON", bg="#34495e", fg="white").pack(padx=20, pady=5)
 
         # Zone de texte pour afficher les messages
-        self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
+        self.text_area = tkinter.scrolledtext.ScrolledText(self.win, bg="salmon")
         self.text_area.pack(padx=20, pady=5)
         self.text_area.config(state="disabled")
 
         # Label pour le champ de message
         Label(self.win, text="Message", bg="#34495e", fg="white").pack(padx=20, pady=5)
-        self.input_field = Text(self.win, height=3)
+        self.input_field = Text(self.win, height=3, bg="salmon")
         self.input_field.pack(padx=20, pady=5)
 
         # Bouton pour envoyer le message
-        Button(self.win, text="Envoyer", command=self.send_message, bg="#3498db", fg="white").pack(padx=20, pady=5)
+        Button(self.win, text="Envoyer", command=self.send_message, bg="salmon", fg="white").pack(padx=20, pady=5)
 
         self.gui_done = True
         self.win.protocol("WM_DELETE_WINDOW", self.stop) 
@@ -98,7 +106,8 @@ class Client:
             self.text_area.yview("end")
             self.text_area.config(state="disabled")
 
-        self.win.mainloop()  
+        self.win.mainloop()
+
 
     # Méthode pour envoyer un message
     def send_message(self):
@@ -134,7 +143,7 @@ class Client:
                 self.sock.close()  
                 break  
     def logout_user(self):
-        self.win.destroy()  # Fermez la fenêtre principale
+        self.win.destroy()  
         self.sock.close()  
         UserUp()
 if __name__ == "__main__":
