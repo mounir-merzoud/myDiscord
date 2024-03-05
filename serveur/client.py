@@ -4,6 +4,7 @@ import tkinter.scrolledtext
 from tkinter import Tk, Label, Text, Button, Toplevel, Frame
 from ttkthemes import ThemedStyle 
 import mariadb  
+from userup import UserUp
 
 HOST = "10.10.104.142"
 PORT = 9090
@@ -64,7 +65,7 @@ class Client:
         Button(self.left_frame, text="Utilisateurs", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
         Button(self.left_frame, text="Option", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
         Button(self.left_frame, text="Informations", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
-        Button(self.left_frame, text="Déconnexion", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Déconnexion", bg="#2ecc71", fg="white", width=15, command=self.logout_user).pack(fill="x", pady=5)
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
@@ -132,7 +133,10 @@ class Client:
                 print("Erreur")  
                 self.sock.close()  
                 break  
-
+    def logout_user(self):
+        self.win.destroy()  # Fermez la fenêtre principale
+        self.sock.close()  
+        UserUp()
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
