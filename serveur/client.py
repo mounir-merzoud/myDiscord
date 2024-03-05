@@ -1,23 +1,11 @@
-
 import socket  
 import threading  
 import tkinter.scrolledtext  
-from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
+from tkinter import Tk, Label, Text, Button, Toplevel, Frame
 from ttkthemes import ThemedStyle 
 import mariadb  
 
-HOST = "192.168.166.61"
-import socket  
-import threading  
-import tkinter.scrolledtext  
-from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
-from tkinter import PhotoImage
-from ttkthemes import ThemedStyle 
-from PIL import Image, ImageTk
-import pymysql.cursors  
-import mariadb  
-
-HOST = "10.10.95.62"
+HOST = "10.10.104.142"
 PORT = 9090
 
 # Fonction pour enregistrer les messages dans un fichier
@@ -30,15 +18,11 @@ class Client:
     def __init__(self, host, port, username, password):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
-        self.msg = Tk()
-        self.msg.withdraw()
         self.username = username 
         self.password = password 
         self.authenticate()
 
-
     def authenticate(self):
-        
         connection = mariadb.connect(user='mounir-merzoudy',
                                      password='Mounir-1992',
                                      host='82.165.185.52',
@@ -53,7 +37,6 @@ class Client:
                 if user:
                     print("Authentification réussie.")
                     self.start_chat()
-                    self.show_user_list(cursor)
                 else:
                     print("Erreur d'authentification.")
         finally:
@@ -78,31 +61,17 @@ class Client:
         self.left_frame.pack(side="left", fill="y", padx=20, pady=20)
 
         # Boutons dans le cadre bleu
-        self.users_button = Button(self.left_frame, text="Utilisateurs", command=self.open_users_window, bg="red")
-        self.users_button.pack(fill="x", pady=5)
-
-        self.option_button = Button(self.left_frame, text="Option", command=self.open_option_window, bg="red")
-        self.option_button.pack(fill="x", pady=5)
-
-        self.info_button = Button(self.left_frame, text="Informations", command=self.open_info_window, bg="red")
-        self.info_button.pack(fill="x", pady=5)
-
-        self.logout_button = Button(self.left_frame, text="Déconnexion", command=self.logout, bg="red")
-        self.logout_button.pack(fill="x", pady=5)
-
-        # Charger l'image dans le thread principal
-        self.load_background_image()
-
-
+        Button(self.left_frame, text="Utilisateurs", bg="red").pack(fill="x", pady=5)
+        Button(self.left_frame, text="Option", bg="red").pack(fill="x", pady=5)
+        Button(self.left_frame, text="Informations", bg="red").pack(fill="x", pady=5)
+        Button(self.left_frame, text="Déconnexion", bg="red").pack(fill="x", pady=5)
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
         style.set_theme("equilux")  # Appliquer le thème equilux
     
         # Label pour le salon
-        self.chat_label = Label(self.win, text="SALON")
-        self.chat_label.configure(font="Arial 12", background=style.lookup('TLabel', 'background'), foreground=style.lookup('TLabel', 'foreground'))
-        self.chat_label.pack(padx=20, pady=5)
+        Label(self.win, text="SALON").pack(padx=20, pady=5)
 
         # Zone de texte pour afficher les messages
         self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
@@ -110,17 +79,12 @@ class Client:
         self.text_area.config(state="disabled")
 
         # Label pour le champ de message
-        self.msg_label = Label(self.win, text="Message")
-        self.msg_label.configure(font="Arial 12", background=style.lookup('TLabel', 'background'), foreground=style.lookup('TLabel', 'foreground'))
-        self.msg_label.pack(padx=20, pady=5)
-
+        Label(self.win, text="Message").pack(padx=20, pady=5)
         self.input_field = Text(self.win, height=3)
         self.input_field.pack(padx=20, pady=5)
 
         # Bouton pour envoyer le message
-        self.send_button = Button(self.win, text="Envoyer", command=self.send_message)
-        self.send_button.configure(font="Arial 12", background="#0000FF", foreground="white")
-        self.send_button.pack(padx=20, pady=5)
+        Button(self.win, text="Envoyer", command=self.send_message, bg="#0000FF", fg="white").pack(padx=20, pady=5)
 
         self.gui_done = True
         self.win.protocol("WM_DELETE_WINDOW", self.stop) 
@@ -135,11 +99,6 @@ class Client:
 
         self.win.mainloop()  
 
-    # Méthode pour charger l'image de fond dans le thread principal
-    def load_background_image(self):
-        self.bg_image = Image.open('images/Design sans titre.png')
-
-
     # Méthode pour envoyer un message
     def send_message(self):
         message = f"{self.username} : {self.input_field.get('1.0', 'end')}"
@@ -152,7 +111,6 @@ class Client:
         self.running = False  
         self.win.destroy()  
         self.sock.close()  
-
         exit(0)
 
     def receive(self):
@@ -175,36 +133,8 @@ class Client:
                 self.sock.close()  
                 break  
 
-    # Méthode pour afficher la liste des utilisateurs dans une fenêtre séparée
-    def show_user_list(self, cursor):
-        user_list_window = Toplevel()
-        user_list_window.title("Liste des utilisateurs")
-        user_list_window.geometry("300x300")  # Définir les dimensions de la fenêtre de la liste des utilisateurs
-
-        # Récupérer la liste des utilisateurs depuis la base de données
-        cursor.execute("SELECT username FROM user")
-        users = cursor.fetchall()
-
-        # Afficher les utilisateurs dans un tableau
-        for i, user in enumerate(users, start=1):
-            if user[0] != self.username:  # Ne pas afficher l'utilisateur connecté lui-même
-                user_label = Label(user_list_window, text=user[0])
-                user_label.grid(row=i, column=0, padx=10, pady=5)
-
-    # Méthodes pour ouvrir les fenêtres des différentes fonctionnalités
-    def open_users_window(self):
-        pass  # Remplir cette méthode pour afficher la fenêtre des utilisateurs
-    
-    def open_option_window(self):
-        pass  # Remplir cette méthode pour afficher la fenêtre des options
-    
-    def open_info_window(self):
-        pass  # Remplir cette méthode pour afficher la fenêtre d'informations
-
-    def logout(self):
-        pass  # Remplir cette méthode pour gérer la déconnexion
-
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
+
     
