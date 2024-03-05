@@ -116,9 +116,6 @@ google_logo=PhotoImage(file='images/google.png')
 googleButton=Button(login_window, image=google_logo, bd=0, bg='white', activebackground='white', cursor='hand2')
 googleButton.place(x=650, y=400)
 
-signupLabel=Label(login_window,text='Ne pas de compte ?', font=('Comic Sans MS',12,'bold'), fg='firebrick1', bg='white')
-signupLabel.place(x=575, y=500)
-
 newaccountButton=Button(login_window,text='Create New', font=('Comic Sans MS', 9, 'bold underline'), fg='black'
                    , bg='white', activeforeground='black', activebackground='white', cursor='hand2',bd=0, command=signup_page)
 newaccountButton.place(x=727, y=500)

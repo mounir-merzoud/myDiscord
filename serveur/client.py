@@ -57,21 +57,21 @@ class Client:
         self.win.title("Chat App")
 
         # Création du cadre bleu à gauche
-        self.left_frame = Frame(self.win, bg="blue", width=150)
+        self.left_frame = Frame(self.win, bg="#34495e", width=150)
         self.left_frame.pack(side="left", fill="y", padx=20, pady=20)
 
         # Boutons dans le cadre bleu
-        Button(self.left_frame, text="Utilisateurs", bg="red").pack(fill="x", pady=5)
-        Button(self.left_frame, text="Option", bg="red").pack(fill="x", pady=5)
-        Button(self.left_frame, text="Informations", bg="red").pack(fill="x", pady=5)
-        Button(self.left_frame, text="Déconnexion", bg="red").pack(fill="x", pady=5)
+        Button(self.left_frame, text="Utilisateurs", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Option", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Informations", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
+        Button(self.left_frame, text="Déconnexion", bg="#2ecc71", fg="white", width=15).pack(fill="x", pady=5)
 
         # Création du style thématisé
         style = ThemedStyle(self.win)
         style.set_theme("equilux")  # Appliquer le thème equilux
     
         # Label pour le salon
-        Label(self.win, text="SALON").pack(padx=20, pady=5)
+        Label(self.win, text="SALON", bg="#34495e", fg="white").pack(padx=20, pady=5)
 
         # Zone de texte pour afficher les messages
         self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
@@ -79,12 +79,12 @@ class Client:
         self.text_area.config(state="disabled")
 
         # Label pour le champ de message
-        Label(self.win, text="Message").pack(padx=20, pady=5)
+        Label(self.win, text="Message", bg="#34495e", fg="white").pack(padx=20, pady=5)
         self.input_field = Text(self.win, height=3)
         self.input_field.pack(padx=20, pady=5)
 
         # Bouton pour envoyer le message
-        Button(self.win, text="Envoyer", command=self.send_message, bg="#0000FF", fg="white").pack(padx=20, pady=5)
+        Button(self.win, text="Envoyer", command=self.send_message, bg="#3498db", fg="white").pack(padx=20, pady=5)
 
         self.gui_done = True
         self.win.protocol("WM_DELETE_WINDOW", self.stop) 
@@ -136,5 +136,6 @@ class Client:
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
+
 
     
