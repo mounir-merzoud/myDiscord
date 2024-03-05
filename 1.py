@@ -1,5 +1,5 @@
-from tkinter import * 
-from tkinter import messagebox
+from tkinter import *
+from tkinter import messagebox, filedialog
 import mariadb
 
 window = Tk()
@@ -46,6 +46,13 @@ light_mode.place(x=495, y=15)
 text = Label(window, text="change BG", font="Arial 14 bold", bg="#444654")
 text.place(x=600, y=200)
 
+def load_profile_image():
+    filename = filedialog.askopenfilename(initialdir="/", title="Select Profile Image", filetypes=(("Image files", "*.jpg *.jpeg *.png *.gif"), ("All files", "*.*")))
+    if filename:
+        profile_image = PhotoImage(file=filename)
+        profile_image_label.config(image=profile_image)
+        profile_image_label.image = profile_image  # Keep a reference to the image to prevent it from being garbage collected
+
 def load_profile():
     global profile_image_label, name_label, info_label
 
@@ -63,7 +70,7 @@ def load_profile():
             cursor.execute(sql)
             row = cursor.fetchone()
             if row is None:
-                messagebox.showerror('Error', 'Aucun utilisateur trouvé')
+                messagebox.showerror('Error', 'No user found')
                 return
             return row
 
@@ -73,31 +80,32 @@ def load_profile():
 
     profile_data = fetch_profile_data()
     if profile_data is not None:
-        # Créez un cadre pour le contenu du profil
         profile_frame = Frame(window, bg="#444654")
         profile_frame.place(x=300, y=100, width=690, height=560)
 
-        
-        # Affichez la photo de profil
-        profile_image = PhotoImage(file=profile_data[4])
-        profile_image_label = Label(profile_frame, image=profile_image, bg="#444654")
+        load_image_button = Button(profile_frame, text="Load Profile Image", command=load_profile_image)
+        load_image_button.place(x=20, y=150)
+
+        profile_image_label = Label(profile_frame, bg="#444654")
         profile_image_label.place(x=20, y=20, width=120, height=120)
 
-        # Affichez les informations de l'utilisateur
         name_label = Label(profile_frame, text=f"{profile_data[0]} {profile_data[1]}", font="Arial 20 bold", bg="#444654", fg="white")
-        name_label.place(x=20, y=20)
+        name_label.place(x=160, y=20)
 
         email_label = Label(profile_frame, text=f"Email : {profile_data[2]}", font="Arial 14", bg="#444654", fg="white")
-        email_label.place(x=20, y=60)
+        email_label.place(x=160, y=60)
 
-        password_label = Label(profile_frame, text=f"Mot de passe : {profile_data[3]}", font="Arial 14", bg="#444654", fg="white")
-        password_label.place(x=20, y=100)  
+        password_label = Label(profile_frame, text=f"Password : {profile_data[3]}", font="Arial 14", bg="#444654", fg="white")
+        password_label.place(x=160, y=100)  
 
-        info_label = Label(profile_frame, text=f"Informations : {profile_data[5]}", font="Arial 14", bg="#444654", fg="white")
+        info_label = Label(profile_frame, text=f"Information : {profile_data[5]}", font="Arial 14", bg="#444654", fg="white")
         info_label.place(x=160, y=180)
-        
 
 load_profile()
 window.mainloop()
+
+
+
+
 
 

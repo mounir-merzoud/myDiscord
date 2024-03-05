@@ -2,10 +2,7 @@ import socket
 import threading  
 import tkinter.scrolledtext  
 from tkinter import simpledialog, Tk, Label, Text, Button, Toplevel, Frame
-from tkinter import PhotoImage
-from ttkthemes import ThemedStyle 
-from PIL import Image, ImageTk
-import pymysql.cursors  
+from ttkthemes import ThemedStyle  
 import mariadb  
 
 HOST = "10.10.101.10"
