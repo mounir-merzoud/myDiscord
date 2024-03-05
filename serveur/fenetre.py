@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import simpledialog
 import mariadb
+import os
 
 class MainWindow:
     def __init__(self, master):
@@ -38,6 +40,10 @@ class MainWindow:
 
         self.selected_channel = None  # Pour stocker le salon sélectionné
 
+        # Bouton pour ajouter un nouveau salon
+        add_channel_button = tk.Button(self.channel_frame, text="Ajouter un salon", command=self.add_channel)
+        add_channel_button.pack(side=tk.BOTTOM, fill=tk.X)
+
         # Cadre pour afficher les messages
         self.messages_frame = tk.Frame(self.main_frame, bg="white", width=self.messages_frame_width)
         self.messages_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -70,6 +76,23 @@ class MainWindow:
         for salon in salons:
             self.channels_listbox.insert(tk.END, salon[0])
         cursor.close()
+
+    def add_channel(self):
+        # Demander à l'utilisateur d'entrer le nom du nouveau salon
+        new_channel = simpledialog.askstring("Nouveau salon", "Entrez le nom du nouveau salon:")
+        if new_channel:
+            # Ajouter le nouveau salon à la base de données
+            cursor = self.connection.cursor()
+            cursor.execute("INSERT INTO salon (nom, chemin_fichier) VALUES (?, ?)", (new_channel, f"{new_channel}.txt"))
+            self.connection.commit()
+            cursor.close()
+
+            # Mettre à jour la liste des salons dans l'interface
+            self.channels_listbox.insert(tk.END, new_channel)
+
+            # Créer un fichier txt vide pour le nouveau salon
+            with open(f"{new_channel}.txt", "w") as file:
+                pass
 
     def send_message(self):
         if self.selected_channel is not None:
