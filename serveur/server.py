@@ -1,17 +1,17 @@
 import socket
 import threading
 
-HOST ="10.10.102.242"
 
+HOST ="192.168.166.61"
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((HOST, port))  
+server.bind((HOST, port))  # Utilisez un tuple pour spécifier l'adresse et le port
 server.listen()
 
 clients = []
 surnoms = []
 
-def broadcast(message): 
+def broadcast(message):
     for client in clients:
         client.send(message)
 
