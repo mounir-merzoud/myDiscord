@@ -8,12 +8,14 @@ import mariadb
 from userup import UserUp
 import re
 import json
+import pyaudio
+import wave
 
-PRIMARY_COLOR = "#7289da"  # Couleur Discord
-SECONDARY_COLOR = "#99aab5"  # Couleur Discord plus claire
-BACKGROUND_COLOR = "#36393f"  # Couleur Discord foncée
-TEXT_COLOR = "#ffffff"  # Blanc
-BUTTON_COLOR = "#7289da"  # Couleur Discord pour les boutons
+PRIMARY_COLOR = "#FA8072"  # Salmon
+SECONDARY_COLOR = "#FFA07A"  # Salmon plus foncé
+BACKGROUND_COLOR = "#FDF5E6"  # Couleur salmon claire
+TEXT_COLOR = "#000000"  # Noir
+BUTTON_COLOR = "#E9967A"  # Salmon3
 
 HOST = "10.10.106.14"
 PORT = 9090
@@ -102,9 +104,13 @@ class Client:
         self.input_field.pack(side="left", fill="both", expand=True, padx=(0, 5))
 
         # Bouton pour envoyer le message
-        ttk.Button(input_button_frame, text="envoye", style="Discord.TButton", command=self.send_message).pack(side="left", padx=(0, 20))
-        ttk.Button(input_button_frame, text="Emoji", style="Discord.TButton", command=self.send_emoji).pack(side="left", padx=(0, 30))
+        ttk.Button(input_button_frame, text="➡️", style="Discord.TButton", command=self.send_message).pack(side="left", padx=(0, 20))
 
+        # Bouton pour sélectionner un emoji avec un emoji
+        ttk.Button(input_button_frame, text="😃", style="Discord.TButton", command=self.send_emoji).pack(side="left", padx=(4, 30))
+
+        # Bouton pour enregistrer un message vocal avec un emoji
+        ttk.Button(input_button_frame, text="🎙️", style="Discord.TButton", command=self.record_voice_message).pack(side="left", padx=(10, 20))
         # Liste des utilisateurs connectés
         self.user_listbox = tk.Listbox(self.left_frame, bg=PRIMARY_COLOR, fg=TEXT_COLOR, font=("Helvetica", 12))
         self.user_listbox.pack(fill="both", expand=True, padx=20, pady=5)
@@ -121,9 +127,10 @@ class Client:
             self.text_area.config(state="disabled")
 
         self.win.mainloop()
+
     def send_emoji(self):
         try:
-            with open("imoji.json", "r") as file:  # Correction du nom du fichier
+            with open("imoji.json", "r", encoding="utf-8") as file:  # Correction du nom du fichier
                 emojis_data = json.load(file)
         except Exception as e:
             print("Une erreur s'est produite lors du chargement du fichier imoji.json :", e)
@@ -139,11 +146,9 @@ class Client:
         for emoji in emojis:
             ttk.Button(emoji_window, text=emoji, command=lambda e=emoji: self.send_selected_emoji(e)).pack(padx=5, pady=5)
 
-
-# Méthode pour envoyer l'emoji sélectionné
     def send_selected_emoji(self, emoji):
         self.input_field.insert("end", emoji)
-    # Méthode pour afficher les utilisateurs
+
     def show_users(self):
         connection = mariadb.connect(user='mounir-merzoudy',
                                      password='Mounir-1992',
@@ -168,7 +173,6 @@ class Client:
         finally:
             connection.close()
 
-    # Méthode pour envoyer un message
     def send_message(self):
         message = f"{self.username} : {self.input_field.get('1.0', 'end')}"
         # Recherche des mentions d'utilisateurs
@@ -184,14 +188,31 @@ class Client:
         self.sock.send(message.encode("utf-8"))
         enregistrer_message(message)
 
-    # Méthode pour arrêter le client
+    def record_voice_message(self):
+        frames = []
+        try:
+            print("Enregistrement vocal commencé...")
+            while True:
+                data = self.stream.read(1024)
+                frames.append(data)
+        except KeyboardInterrupt:
+            print("Enregistrement vocal terminé.")
+            filename = "voice_message.wav"
+            wf = wave.open(filename, 'wb')
+            wf.setnchannels(1)
+            wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
+            wf.setframerate(44100)
+            wf.writeframes(b''.join(frames))
+            wf.close()
+
+            # Envoyer le fichier audio au serveur ou effectuer toute autre action nécessaire
+
     def stop(self):
         self.running = False
         self.win.destroy()
         self.sock.close()
         exit(0)
 
-    # Méthode pour recevoir les messages
     def receive(self):
         while self.running:
             try:
@@ -211,15 +232,12 @@ class Client:
                 print("Erreur")
                 self.sock.close()
                 break
-    
-    # Méthode pour se déconnecter
+
     def logout_user(self):
         self.win.destroy()
         self.sock.close()
         UserUp()
 
-    
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
-
