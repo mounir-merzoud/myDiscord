@@ -2,7 +2,6 @@
 import tkinter as tk
 from tkinter import simpledialog
 import mariadb
-import os
 from message import ChatApplication
 
 class MainWindow:

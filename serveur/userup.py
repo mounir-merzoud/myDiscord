@@ -50,7 +50,7 @@ class UserUp:
                                     width=17, command=self.connect_database)
         self.signup_button.grid(row=10, column=0, padx=10)
 
-        self.Alreadyaccount = Label(self.frame, text='Y a pas un compt ?', font=('Comic Sans MS', 9, 'bold'), bg='white', fg='firebrick1')
+        self.Alreadyaccount = Label(self.frame, text='Connexion', font=('Comic Sans MS', 9, 'bold'), bg='white', fg='firebrick1')
         self.Alreadyaccount.grid(row=11, column=0, sticky='w', padx=25, pady=10)
 
         self.login_button = Button(self.frame, text='Log in', font=('Comic Sans MS', 9, 'bold'), bg='white', fg='blue', bd=0, cursor='hand2',

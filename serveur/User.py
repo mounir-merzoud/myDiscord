@@ -1,4 +1,3 @@
-
 from tkinter import *
 from tkinter import messagebox
 import mariadb
@@ -13,7 +12,7 @@ from MotDePass import forget_pass
 
 def open_chat_window():
     global chat_client
-    HOST ="10.10.104.142"
+    HOST ="10.10.106.14"
     PORT = 9090
     username = usernameEntry.get()  # Récupérer le nom d'utilisateur
     password = passwordEntry.get()  # Récupérer le mot de passe
@@ -115,9 +114,6 @@ loginButton.place(x=578, y=350)
 google_logo=PhotoImage(file='images/google.png')
 googleButton=Button(login_window, image=google_logo, bd=0, bg='white', activebackground='white', cursor='hand2')
 googleButton.place(x=650, y=400)
-
-signupLabel=Label(login_window,text='Ne pas de compte ?', font=('Comic Sans MS',12,'bold'), fg='firebrick1', bg='white')
-signupLabel.place(x=575, y=500)
 
 newaccountButton=Button(login_window,text='Create New', font=('Comic Sans MS', 9, 'bold underline'), fg='black'
                    , bg='white', activeforeground='black', activebackground='white', cursor='hand2',bd=0, command=signup_page)

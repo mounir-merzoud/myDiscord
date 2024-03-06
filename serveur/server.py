@@ -2,7 +2,7 @@ import socket
 import threading
 
 
-HOST ="10.10.104.142"
+HOST ="10.10.106.14"
 port =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, port))  # Utilisez un tuple pour spécifier l'adresse et le port
@@ -39,8 +39,8 @@ def recevoir():
         surnoms.append(surnom)
         clients.append(client)
         print(f"Le surnom du client est {surnom}")
-        broadcast(f"{surnom} connecté au serveur\n".encode("utf-8"))
-        client.send("Connecté au serveur ".encode("utf-8"))
+        broadcast(f"{surnom} ".encode("utf-8"))
+        client.send(" ".encode("utf-8"))
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
 print("attente de connexion...")
