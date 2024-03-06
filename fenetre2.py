@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import mysql.connector
-from message import ChatApplication
+#from message import ChatApplication
 
 class MainWindow:
     def __init__(self, master):

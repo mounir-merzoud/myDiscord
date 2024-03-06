@@ -175,7 +175,11 @@ class ChatApplication:
             emoji_button.pack(side=tk.LEFT, padx=5, pady=5)
 
     def insert_emoji(self, emoji):
-        self.message_input.insert(tk.END, emoji)
+    # Récupérer l'indice de fin du texte actuel dans le champ de texte
+        current_position = self.message_input.index(tk.END)
+        # Insérer l'emoji à cet indice
+        self.message_input.insert(current_position, emoji)
+
 
 def main():
     root = tk.Tk()

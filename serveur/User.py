@@ -1,4 +1,3 @@
-
 from tkinter import *
 from tkinter import messagebox
 import mariadb
@@ -13,7 +12,7 @@ from MotDePass import forget_pass
 
 def open_chat_window():
     global chat_client
-    HOST ="10.10.104.142"
+    HOST ="10.10.106.14"
     PORT = 9090
     username = usernameEntry.get()  # Récupérer le nom d'utilisateur
     password = passwordEntry.get()  # Récupérer le mot de passe
