@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import mariadb
 from userup import UserUp
-from tkinter import  Tk, Label, Text, Button, Toplevel, Frame
+from tkinter import Tk, Label, Text, Button, Toplevel, Frame
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 from client import Client

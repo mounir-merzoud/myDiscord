@@ -1,3 +1,4 @@
+
 bik  : hi
 
 bik  : hi
@@ -5,5 +6,35 @@ bik  : hi
  
 bik  : hello 
 
-bik  : hello 
 
+mohamdi  : vous allez bien ?
+
+mohamdi  : vous allez bien ?
+ 
+ 
+mohamdi : oui
+
+mohamdi : oui
+ 
+ 
+SURNOM
+mohamdi : h
+
+mohamdi : h
+ 
+ 
+mohamdi : hi
+
+mohamdi : hi
+ 
+ 
+mohamdi (13:02:39): re bonjour
+mohamdi (13:02:39): re bonjour 
+ 
+mohamdi (13:03:30): cv
+mohamdi (13:03:30): cv
+mohamdi (13:21:51): vous aller bien ?
+mohamdi (13:21:51): vous aller bien ? 
+ 
+bik : hi 
+ 

@@ -10,6 +10,8 @@ import re
 import json
 import pyaudio
 import wave
+import time
+import datetime
 
 PRIMARY_COLOR = "#FA8072"  # Salmon
 SECONDARY_COLOR = "#FFA07A"  # Salmon plus foncé
@@ -111,6 +113,7 @@ class Client:
 
         # Bouton pour enregistrer un message vocal avec un emoji
         ttk.Button(input_button_frame, text="🎙️", style="Discord.TButton", command=self.record_voice_message).pack(side="left", padx=(10, 20))
+        
         # Liste des utilisateurs connectés
         self.user_listbox = tk.Listbox(self.left_frame, bg=PRIMARY_COLOR, fg=TEXT_COLOR, font=("Helvetica", 12))
         self.user_listbox.pack(fill="both", expand=True, padx=20, pady=5)
@@ -174,7 +177,9 @@ class Client:
             connection.close()
 
     def send_message(self):
-        message = f"{self.username} : {self.input_field.get('1.0', 'end')}"
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")  # Obtenir l'heure actuelle au format HH:MM:SS
+        message_content = self.input_field.get('1.0', 'end').strip()  # Récupérer le contenu du message
+        message = f"{self.username} ({current_time}): {message_content}"  # Ajouter l'heure au message
         # Recherche des mentions d'utilisateurs
         mentions = re.findall(r"@(\w+)", message)
         # Remplacer les mentions par des tags spéciaux
@@ -189,23 +194,43 @@ class Client:
         enregistrer_message(message)
 
     def record_voice_message(self):
-        frames = []
-        try:
-            print("Enregistrement vocal commencé...")
-            while True:
-                data = self.stream.read(1024)
-                frames.append(data)
-        except KeyboardInterrupt:
-            print("Enregistrement vocal terminé.")
-            filename = "voice_message.wav"
-            wf = wave.open(filename, 'wb')
-            wf.setnchannels(1)
-            wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
-            wf.setframerate(44100)
-            wf.writeframes(b''.join(frames))
-            wf.close()
+        CHUNK = 1024
+        FORMAT = pyaudio.paInt16
+        CHANNELS = 1
+        RATE = 44100
+        RECORD_SECONDS = 5
+        WAVE_OUTPUT_FILENAME = "memo.wav"
 
-            # Envoyer le fichier audio au serveur ou effectuer toute autre action nécessaire
+        p = pyaudio.PyAudio()
+
+        stream = p.open(format=FORMAT,
+                        channels=CHANNELS,
+                        rate=RATE,
+                        input=True,
+                        frames_per_buffer=CHUNK)
+
+        print("* Enregistrement audio...")
+
+        frames = []
+
+        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+            data = stream.read(CHUNK)
+            frames.append(data)
+
+        print("* Enregistrement terminé.")
+
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+        wf.setnchannels(CHANNELS)
+        wf.setsampwidth(p.get_sample_size(FORMAT))
+        wf.setframerate(RATE)
+        wf.writeframes(b''.join(frames))
+        wf.close()
+
+        self.memo_audio_path = WAVE_OUTPUT_FILENAME
 
     def stop(self):
         self.running = False
@@ -239,5 +264,5 @@ class Client:
         UserUp()
 
 if __name__ == "__main__":
-    # Initialisation du client
+    # Initialisation du clientv  
     client = Client(HOST, PORT)
