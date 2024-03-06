@@ -103,10 +103,19 @@ class Client:
         self.input_field.pack(side="left", fill="both", expand=True, padx=(0, 5))
 
         # Bouton pour envoyer le message
+<<<<<<< HEAD:serveur/client.py
         ttk.Button(input_button_frame, text="envoye", style="Discord.TButton", command=self.send_message).pack(side="left", padx=(0, 10), pady=(0, 10))
         ttk.Button(input_button_frame, text="Emoji", style="Discord.TButton", command=self.send_emoji).pack(side="left", padx=(0, 10), pady=(0, 10))
         ttk.Button(input_button_frame, text="Enregistrer Message Vocal", style="Discord.TButton", command=self.record_voice_message).pack(side="left", padx=(0, 10), pady=(0, 10))
+=======
+        ttk.Button(input_button_frame, text="➡️", style="Discord.TButton", command=self.send_message).pack(side="left", padx=(0, 20))
+>>>>>>> fd97029fdae30ea704739e5d83967f74ed37ba03:Classe.py/client.py
 
+        # Bouton pour sélectionner un emoji avec un emoji
+        ttk.Button(input_button_frame, text="😃", style="Discord.TButton", command=self.send_emoji).pack(side="left", padx=(4, 30))
+
+        # Bouton pour enregistrer un message vocal avec un emoji
+        ttk.Button(input_button_frame, text="🎙️", style="Discord.TButton", command=self.record_voice_message).pack(side="left", padx=(10, 20))
         # Liste des utilisateurs connectés
         self.user_listbox = tk.Listbox(self.left_frame, bg=PRIMARY_COLOR, fg=TEXT_COLOR, font=("Helvetica", 12))
         self.user_listbox.pack(fill="both", expand=True, padx=20, pady=5)
@@ -210,6 +219,7 @@ class Client:
             exit(0)
 
     def receive(self):
+<<<<<<< HEAD:serveur/client.py
             while self.running:
                 try:
                     message = self.sock.recv(1024)
@@ -233,8 +243,32 @@ class Client:
             self.win.destroy()
             self.sock.close()
             UserUp()
+=======
+        while self.running:
+            try:
+                message = self.sock.recv(1024)
+                if message == b'surnom':
+                    self.sock.send(self.username.encode("utf-8"))
+                else:
+                    if self.gui_done:
+                        self.text_area.config(state="normal")
+                        self.text_area.insert("end", message.decode())
+                        self.text_area.yview("end")
+                        self.text_area.config(state="disabled")
+                        enregistrer_message(message.decode())
+            except ConnectionAbortedError:
+                break
+            except:
+                print("Erreur")
+                self.sock.close()
+                break
+
+    def logout_user(self):
+        self.win.destroy()
+        self.sock.close()
+        UserUp()
+>>>>>>> fd97029fdae30ea704739e5d83967f74ed37ba03:Classe.py/client.py
 
 if __name__ == "__main__":
     # Initialisation du client
     client = Client(HOST, PORT)
-

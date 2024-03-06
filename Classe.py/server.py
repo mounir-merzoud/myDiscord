@@ -1,11 +1,15 @@
 import socket
 import threading
+import wave
+import pyaudio
+
+HOST = "10.10.106.14"
+PORT = 9090
 
 
-HOST ="10.10.106.14"
-PORT =9090
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((HOST, PORT))  # Utilisez un tuple pour spécifier l'adresse et le port
+
 server.listen()
 
 clients = []
@@ -16,12 +20,16 @@ def broadcast(message):
         client.send(message)
 
 def handle(client):
-    while True :
+    while True:
         try:
             message = client.recv(1024)
-            print(f"{surnoms[clients.index(client)]} dit: {message.decode()}")
-            broadcast(message)
-            pass
+            # Si le message commence par "AUDIO:", alors c'est un message vocal
+            if message.startswith(b"AUDIO:"):
+                # Traitez le message vocal ici (stockage, transmission à d'autres clients, etc.)
+                pass
+            else:
+                print(f"{surnoms[clients.index(client)]} dit: {message.decode()}")
+                broadcast(message)
         except:
             index = clients.index(client)
             clients.remove(client)
@@ -43,6 +51,6 @@ def recevoir():
         client.send(" ".encode("utf-8"))
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
-print("attente de connexion...")
 
+print("Attente de connexion...")
 recevoir()
